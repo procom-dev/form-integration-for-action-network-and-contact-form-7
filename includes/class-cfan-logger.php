@@ -2,7 +2,7 @@
 /**
  * CFAN_Logger
  *
- * @package         CF7_ActionNetwork_Integration
+ * @package         Contact_Form_7_to_Action_Network_Integration
  * @subpackage      CFAN_Logger
  * @since           1.0.0
  *
@@ -24,6 +24,7 @@ if ( ! class_exists( 'CFAN_Logger' ) ) {
         public static function log( $message, $level = 'info' ) {
             if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                 $formatted_message = sprintf( '[CF7-AN] [%s] %s', strtoupper( $level ), $message );
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
                 error_log( $formatted_message );
             }
         }

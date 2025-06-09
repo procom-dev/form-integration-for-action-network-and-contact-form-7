@@ -3,7 +3,7 @@
 /**
  * A helper to debug
  *
- * @package         CF7_ActionNetwork_Integration
+ * @package         Contact_Form_7_to_Action_Network_Integration
  * @since           2.3.0
  */
 
@@ -21,7 +21,7 @@ function cfan_activated_debug_functions() {
 if ( ! function_exists( 'cfan_dd' ) && cfan_activated_debug_functions() ) {
     function cfan_dd( $param, $include_pre = true ) {
         echo $include_pre ? '<pre>' : '';
-        print_r( $param );
+        echo wp_kses_post( wp_json_encode( $param, JSON_PRETTY_PRINT ) );
         echo $include_pre ? '</pre>' : '';
         exit;
     }
@@ -33,7 +33,8 @@ if ( ! function_exists( 'cfan_dd' ) && cfan_activated_debug_functions() ) {
  */
 if ( ! function_exists( 'cfan_dump' ) && cfan_activated_debug_functions() ) {
     function cfan_dump( $param ) {
-        error_log( '[CF7-AN] ' . print_r( $param, true ) );
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+        error_log( '[CF7-AN] ' . wp_json_encode( $param ) );
     }
 }
 

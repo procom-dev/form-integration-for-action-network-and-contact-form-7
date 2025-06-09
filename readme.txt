@@ -1,9 +1,9 @@
-=== CF7 to ActionNetwork Integration ===
-Contributors: procom.dev, mariovalney
-Tags: cf7, contact form, actionnetwork, integration, contact form 7, activism, nonprofit
+=== Contact Form 7 to Action Network Integration ===
+Contributors: procomdev, mariovalney
+Tags: contact form 7, action network, cf7, actionnetwork, integration
 Requires at least: 4.7  
-Tested up to: 6.4  
-Stable tag: trunk  
+Tested up to: 6.8  
+Stable tag: 1.0.0  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
@@ -14,7 +14,7 @@ Seamlessly connect Contact Form 7 to ActionNetwork with smart field mapping, cou
 
 [Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/) is a widely-used plugin by millions of WordPress websites for creating forms. 
 
-The **CF7 to ActionNetwork Integration** plugin provides a powerful bridge between your WordPress forms and ActionNetwork's organizing platform. Designed for nonprofits, advocacy groups, and political campaigns, this plugin automatically maps CF7 form fields to ActionNetwork's person data structure with intelligent field recognition and enhanced features.
+The **Contact Form 7 to Action Network Integration** plugin provides a powerful bridge between your WordPress forms and ActionNetwork's organizing platform. Designed for nonprofits, advocacy groups, and political campaigns, this plugin automatically maps CF7 form fields to ActionNetwork's person data structure with intelligent field recognition and enhanced features.
 
 = Key Features =
 
@@ -122,9 +122,14 @@ Yes, you can add multiple URLs (one per line) to send the same form data to diff
 == Installation ==
 
 1. Install [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) and activate it.
-2. Install "CF7 to ActionNetwork" by using the plugins dashboard or upload the entire `cf7-actionnetwork-integration` folder to the `/wp-content/plugins/` directory.
+2. Install "Contact Form 7 to Action Network Integration" by using the plugins dashboard or upload the entire `contact-form-7-to-action-network-integration` folder to the `/wp-content/plugins/` directory.
 3. Activate the plugin through the 'Plugins' menu in WordPress.
 4. You will find the 'ActionNetwork' tab in the form configuration.
+
+== Screenshots ==
+1. Main section of the plugin, where you just enter the Action NEtwork API Endpoint.
+2. The plugin automtically matches you fields from CF7 to the official Action Network\'s Core Fields.
+3. You can also add and remove tags to people submitting you form.
 
 == Changelog ==
 

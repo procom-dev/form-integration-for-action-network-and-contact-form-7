@@ -83,7 +83,8 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
             }
 
             echo '<div class="notice notice-error is-dismissible">';
-            echo '<p>' . sprintf( __( 'You need to install/activate %1$s Contact Form 7%2$s plugin to use %3$s CF7 to ActionNetwork %4$s', 'cf7-actionnetwork-integration' ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
+            // translators: %1$s and %2$s are link tags, %3$s and %4$s are strong tags
+            echo '<p>' . sprintf( esc_html__( 'You need to install/activate %1$s Contact Form 7%2$s plugin to use %3$s CF7 to ActionNetwork %4$s', 'contact-form-7-to-action-network-integration' ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
 
             $screen = get_current_screen();
             if ( $screen->id == 'plugins' ) {
@@ -91,13 +92,13 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 return;
             }
 
-            if ( file_exists( ABSPATH . PLUGINDIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
+            if ( file_exists( WP_PLUGIN_DIR . '/contact-form-7/wp-contact-form-7.php' ) ) {
                 $url = 'plugins.php';
             } else {
                 $url = 'plugin-install.php?tab=search&s=Contact+form+7';
             }
 
-            echo '. <a href="' . esc_url( admin_url( $url ) ) . '">' . __( 'Do it now?', 'cf7-actionnetwork-integration' ) . '</a></p>';
+            echo '. <a href="' . esc_url( admin_url( $url ) ) . '">' . esc_html__( 'Do it now?', 'contact-form-7-to-action-network-integration' ) . '</a></p>';
             echo '</div>';
         }
 
@@ -109,7 +110,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
          */
         public function wpcf7_editor_panels( $panels ) {
             $panels['actionnetwork-panel'] = array(
-                'title'     => __( 'ActionNetwork', 'cf7-actionnetwork-integration' ),
+                'title'     => __( 'ActionNetwork', 'contact-form-7-to-action-network-integration' ),
                 'callback'  => [ $this, 'actionnetwork_panel_html' ],
             );
 
@@ -134,7 +135,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
          */
         public function wpcf7_save_contact_form( $contact_form ) {
             // Verify nonce
-            if ( ! isset( $_POST['cfan_nonce'] ) || ! wp_verify_nonce( $_POST['cfan_nonce'], 'cfan_save_settings' ) ) {
+            if ( ! isset( $_POST['cfan_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['cfan_nonce'] ) ), 'cfan_save_settings' ) ) {
                 return;
             }
 
@@ -162,33 +163,33 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                     }
 
                     return $hook_url;
-                }, explode( PHP_EOL, sanitize_textarea_field( $_POST['cfan-actionnetwork-hook-url'] ) ) ) );
+                }, explode( PHP_EOL, sanitize_textarea_field( wp_unslash( $_POST['cfan-actionnetwork-hook-url'] ) ) ) ) );
                 $new_properties[ 'hook_url' ] = $hook_urls;
             }
 
 
             if ( isset( $_POST['cfan-special-mail-tags'] ) ) {
-                $new_properties[ 'special_mail_tags' ] = sanitize_textarea_field( $_POST['cfan-special-mail-tags'] );
+                $new_properties[ 'special_mail_tags' ] = sanitize_textarea_field( wp_unslash( $_POST['cfan-special-mail-tags'] ) );
             }
 
             if ( isset( $_POST['cfan-custom-headers'] ) ) {
-                $new_properties[ 'custom_headers' ] = sanitize_textarea_field( $_POST['cfan-custom-headers'] );
+                $new_properties[ 'custom_headers' ] = sanitize_textarea_field( wp_unslash( $_POST['cfan-custom-headers'] ) );
             }
 
-            if ( isset( $_POST['cfan-auto-detect-country'] ) && sanitize_text_field( $_POST['cfan-auto-detect-country'] ) === '1' ) {
+            if ( isset( $_POST['cfan-auto-detect-country'] ) && sanitize_text_field( wp_unslash( $_POST['cfan-auto-detect-country'] ) ) === '1' ) {
                 $new_properties[ 'auto_detect_country' ] = '1';
             } else {
                 $new_properties[ 'auto_detect_country' ] = '0';
             }
 
             if ( isset( $_POST['cfan-source-name'] ) ) {
-                $source_name = sanitize_text_field( $_POST['cfan-source-name'] );
+                $source_name = sanitize_text_field( wp_unslash( $_POST['cfan-source-name'] ) );
                 $new_properties[ 'source_name' ] = ! empty( $source_name ) ? $source_name : 'contact-form-7';
             } else {
                 $new_properties[ 'source_name' ] = 'contact-form-7';
             }
 
-            if ( isset( $_POST['cfan-enable-autoresponse'] ) && sanitize_text_field( $_POST['cfan-enable-autoresponse'] ) === '1' ) {
+            if ( isset( $_POST['cfan-enable-autoresponse'] ) && sanitize_text_field( wp_unslash( $_POST['cfan-enable-autoresponse'] ) ) === '1' ) {
                 $new_properties[ 'enable_autoresponse' ] = '1';
             } else {
                 $new_properties[ 'enable_autoresponse' ] = '0';
@@ -197,7 +198,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
             // Handle add tags (comma-separated)
             $add_tags = [];
             if ( isset( $_POST['cfan-add-tags'] ) ) {
-                $tags_string = sanitize_textarea_field( $_POST['cfan-add-tags'] );
+                $tags_string = sanitize_textarea_field( wp_unslash( $_POST['cfan-add-tags'] ) );
                 if ( ! empty( $tags_string ) ) {
                     $tags_array = explode( ',', $tags_string );
                     foreach ( $tags_array as $tag ) {
@@ -213,7 +214,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
             // Handle remove tags (comma-separated)
             $remove_tags = [];
             if ( isset( $_POST['cfan-remove-tags'] ) ) {
-                $tags_string = sanitize_textarea_field( $_POST['cfan-remove-tags'] );
+                $tags_string = sanitize_textarea_field( wp_unslash( $_POST['cfan-remove-tags'] ) );
                 if ( ! empty( $tags_string ) ) {
                     $tags_array = explode( ',', $tags_string );
                     foreach ( $tags_array as $tag ) {
@@ -278,7 +279,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
          * @return string Referred URL or empty string
          */
         private function get_referrer_data() {
-            return isset($_SERVER['HTTP_REFERER']) ? sanitize_text_field($_SERVER['HTTP_REFERER']) : '';
+            return isset($_SERVER['HTTP_REFERER']) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
         }
 
         /**
@@ -317,7 +318,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
             
             // Extract the "source" parameter using parse_url() and parse_str()
             $source = $default_source;
-            $url_components = parse_url($current_url);
+            $url_components = wp_parse_url($current_url);
             if (isset($url_components['query'])) {
                 parse_str($url_components['query'], $params);
                 $source = isset($params['source']) ? sanitize_text_field($params['source']) : $default_source;
@@ -437,17 +438,23 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
             foreach ( $tags as $tag ) {
                 if ( empty( $tag->name ) ) continue;
 
-                // Regular Tags
-                $value = ( ! empty( $_POST[ $tag->name ] ) ) ? $_POST[ $tag->name ] : '';
+                // Get submitted data from CF7 submission object (preferred method)
+                $raw_value = '';
+                if ( ! empty( $submission ) ) {
+                    $posted_data = $submission->get_posted_data();
+                    $raw_value = isset( $posted_data[ $tag->name ] ) ? $posted_data[ $tag->name ] : '';
+                }
+                
+                $value = ! empty( $raw_value ) ? wp_unslash( $raw_value ) : '';
 
                 if ( is_array( $value ) ) {
                     foreach ( $value as $key => $v ) {
-                        $value[ $key ] = stripslashes( $v );
+                        $value[ $key ] = sanitize_text_field( stripslashes( $v ) );
                     }
                 }
 
                 if ( is_string( $value ) ) {
-                    $value = stripslashes( $value );
+                    $value = sanitize_text_field( stripslashes( $value ) );
                 }
 
                 // Files
@@ -498,7 +505,8 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 if ( $tag->has_option( 'free_text' ) && in_array( $tag->basetype, [ 'checkbox', 'radio' ] ) ) {
                     $free_text_label = end( $tag->values );
                     $free_text_name  = $tag->name . '_free_text';
-                    $free_text_value = ( ! empty( $_POST[ $free_text_name ] ) ) ? $_POST[ $free_text_name ] : '';
+                    // phpcs:ignore WordPress.Security.NonceVerification.Missing -- CF7 handles nonce verification
+                    $free_text_value = ( ! empty( $_POST[ $free_text_name ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ $free_text_name ] ) ) : '';
 
                     if ( is_array( $value ) ) {
                         foreach ( $value as $key => $v ) {
@@ -559,7 +567,8 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 // Support to "_raw_" values. @see WPCF7_MailTag::__construct()
                 if ( $mail_tag->get_option( 'do_not_heat' ) ) {
                     $value = apply_filters( 'wpcf7_special_mail_tags', '', $mail_tag->tag_name(), false, $mail_tag );
-                    $value = $_POST[ $mail_tag->field_name() ] ?? '';
+                    // phpcs:ignore WordPress.Security.NonceVerification.Missing -- CF7 handles nonce verification
+                    $value = isset( $_POST[ $mail_tag->field_name() ] ) ? sanitize_text_field( wp_unslash( $_POST[ $mail_tag->field_name() ] ) ) : '';
                 }
 
                 $value = apply_filters( 'wpcf7_special_mail_tags', $value, $mail_tag->tag_name(), false, $mail_tag );
@@ -661,6 +670,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
         public function enqueue_admin_assets( $hook ) {
             // Only load on CF7 edit pages
             $screen = get_current_screen();
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin asset loading
             if ( ! $screen || $screen->id !== 'toplevel_page_wpcf7' || ! isset( $_GET['post'] ) ) {
                 return;
             }
@@ -686,11 +696,12 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
 
             // Localize script with translatable strings
             wp_localize_script( 'cfan-admin-js', 'cfan_admin', [
-                'invalid_url_message' => __( 'Please enter a valid URL.', 'cf7-actionnetwork-integration' ),
-                'not_actionnetwork_message' => __( 'This URL is not from ActionNetwork. Please use an ActionNetwork URL.', 'cf7-actionnetwork-integration' ),
-                'detected_type_message' => __( 'ActionNetwork %s detected. This looks correct!', 'cf7-actionnetwork-integration' ),
-                'unknown_pattern_message' => __( 'This ActionNetwork URL pattern is not recognized, but it may still work.', 'cf7-actionnetwork-integration' ),
-                'url_required_message' => __( 'Please enter an ActionNetwork URL to activate the integration.', 'cf7-actionnetwork-integration' )
+                'invalid_url_message' => __( 'Please enter a valid URL.', 'contact-form-7-to-action-network-integration' ),
+                'not_actionnetwork_message' => __( 'This URL is not from ActionNetwork. Please use an ActionNetwork URL.', 'contact-form-7-to-action-network-integration' ),
+                // translators: %s is the ActionNetwork action type (e.g., "form", "petition")
+                'detected_type_message' => __( 'ActionNetwork %s detected. This looks correct!', 'contact-form-7-to-action-network-integration' ),
+                'unknown_pattern_message' => __( 'This ActionNetwork URL pattern is not recognized, but it may still work.', 'contact-form-7-to-action-network-integration' ),
+                'url_required_message' => __( 'Please enter an ActionNetwork URL to activate the integration.', 'contact-form-7-to-action-network-integration' )
             ]);
         }
 
@@ -1005,7 +1016,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
 
             // Method 3: Use CloudFlare country header if available
             if ( isset( $_SERVER['HTTP_CF_IPCOUNTRY'] ) ) {
-                $cf_country = sanitize_text_field( $_SERVER['HTTP_CF_IPCOUNTRY'] );
+                $cf_country = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_IPCOUNTRY'] ) );
                 if ( $cf_country !== 'XX' && strlen( $cf_country ) === 2 ) {
                     return strtoupper( $cf_country );
                 }
@@ -1041,7 +1052,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
 
             foreach ( $ip_headers as $header ) {
                 if ( ! empty( $_SERVER[ $header ] ) ) {
-                    $ip = sanitize_text_field( $_SERVER[ $header ] );
+                    $ip = sanitize_text_field( wp_unslash( $_SERVER[ $header ] ) );
                     
                     // Handle comma-separated IPs (X-Forwarded-For can have multiple IPs)
                     if ( strpos( $ip, ',' ) !== false ) {
@@ -1097,7 +1108,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 return null;
             }
 
-            $accept_language = sanitize_text_field( $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
+            $accept_language = sanitize_text_field( wp_unslash( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) );
             
             // Parse Accept-Language header (e.g., "en-US,en;q=0.9,es;q=0.8")
             if ( preg_match( '/([a-z]{2})-([A-Z]{2})/', $accept_language, $matches ) ) {

@@ -71,7 +71,7 @@ if ( ! class_exists( 'CFAN_ActionNetwork_Module' ) ) {
             // Validate ActionNetwork URL
             if ( ! $this->validate_actionnetwork_url( $hook_url ) ) {
                 CFAN_Logger::error( "Invalid ActionNetwork URL: {$hook_url}" );
-                throw new Exception( __( 'Invalid ActionNetwork URL provided', 'cf7-actionnetwork-integration' ) );
+                throw new Exception( esc_html__( 'Invalid ActionNetwork URL provided', 'contact-form-7-to-action-network-integration' ) );
             }
 
             // Before modifying hook url logic
@@ -183,7 +183,7 @@ if ( ! class_exists( 'CFAN_ActionNetwork_Module' ) ) {
                 return false;
             }
 
-            $parsed = parse_url( $url );
+            $parsed = wp_parse_url( $url );
 
             // Verify that is from Action Network
             if ( ! isset( $parsed['host'] ) || $parsed['host'] !== 'actionnetwork.org' ) {
