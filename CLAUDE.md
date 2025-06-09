@@ -76,18 +76,19 @@ The plugin includes smart mapping for common CF7 field patterns:
 
 ### File Organization
 ```
-cf7-to-actionnetwork-master/
-├── cf7-to-actionnetwork.php (main plugin file)
+cf7-actionnetwork-integration/
+├── cf7-to-actionnetwork.php (main plugin file - CFAN_Core orchestrator)
 ├── includes/
-│   ├── class-cfan-logger.php (logging system)
-│   └── functions-debug.php (debug utilities)
+│   ├── class-cfan-logger.php (centralized logging system)
+│   └── functions-debug.php (cfan_dd/cfan_dump debug helpers)
 ├── modules/
 │   ├── cf7/
-│   │   ├── class-module-cf7.php (CF7 integration)
-│   │   └── admin/ (admin interface + assets)
+│   │   ├── class-module-cf7.php (CF7 hooks and data processing)
+│   │   └── admin/ (admin UI and validation assets)
 │   └── actionnetwork/
-│       └── class-module-actionnetwork.php (API communication)
-└── languages/ (internationalization)
+│       └── class-module-actionnetwork.php (API client with retry logic)
+├── assets/ (WordPress.org plugin assets - banners, screenshots)
+└── languages/ (internationalization support)
 ```
 
 ## Key Functions & Hooks
@@ -134,13 +135,26 @@ cf7-to-actionnetwork-master/
 - Referrer data capture for analytics
 - Custom field support for non-standard form fields
 
-## Development Configuration
+## Development Workflow
 
-### Debug Mode
-- Enable `WP_DEBUG` for comprehensive logging
+### Setup and Testing
+This is a WordPress plugin with no build process - direct PHP development:
+- **Local Testing**: Install in WordPress development environment (`/wp-content/plugins/`)
+- **Dependencies**: Requires Contact Form 7 plugin to be active
+- **Debug Mode**: Enable `WP_DEBUG` in `wp-config.php` for comprehensive logging
+- **Error Logs**: Check WordPress error logs or use `cfan_dump()` for debugging
+
+### Development Commands
+No build tools are used - this is native WordPress PHP development:
+- **Code Validation**: Use WordPress coding standards (WPCS) if available
+- **Testing**: Manual testing with Contact Form 7 forms and ActionNetwork API
+- **Linting**: Standard PHP linting (`php -l filename.php`)
+
+### Debug Functions (WP_DEBUG only)
 - Use `cfan_dd()` for debug dumps (replaces generic `dd()`)
-- Use `cfan_dump()` for error log output
+- Use `cfan_dump()` for error log output  
 - All logging prefixed with `[CF7-AN]` for easy identification
+- Debug functions only available when `WP_DEBUG` is enabled
 
 ### Plugin Constants
 - `CFAN_VERSION` - Plugin version
@@ -155,14 +169,31 @@ cf7-to-actionnetwork-master/
 - Contact Form 7 plugin (required dependency)
 - ActionNetwork account with API access
 
-## Testing Considerations
+## Critical Development Notes
 
-When modifying this plugin, test:
-1. **Security**: Nonce verification and capability checks
-2. **Field mapping**: Various CF7 field name patterns
-3. **API integration**: Different ActionNetwork action types
-4. **Error handling**: Network failures and invalid responses
-5. **Admin UI**: Real-time validation and responsive design
-6. **Logging**: WP_DEBUG output for debugging information
+### Plugin Initialization Flow
+1. `CFAN_Core` class auto-instantiates on plugin load
+2. Modules are dynamically loaded from `/modules/` directory  
+3. Each module registers its own hooks via `CFAN_Core::add_action()`/`add_filter()`
+4. CF7 module only activates when Contact Form 7 is detected
 
-The plugin is production-ready and WordPress.org compliant with modern development practices, comprehensive security measures, and enhanced user experience.
+### Key Integration Points
+- **Data capture**: `wpcf7_mail_sent` hook in CF7 module
+- **Field mapping**: `format_data_for_actionnetwork()` method transforms CF7 data
+- **API transmission**: ActionNetwork module handles HTTP requests with retry logic
+- **Admin interface**: Embedded in CF7's form edit screen as custom tab
+
+### Testing Approach
+Manual testing required - no automated tests:
+1. **Form submission flow**: Create CF7 form → Configure ActionNetwork URL → Test submission
+2. **Field mapping validation**: Test various field name patterns against mapping logic
+3. **API integration**: Verify different ActionNetwork action types (forms, petitions, events)
+4. **Error scenarios**: Test network failures, invalid URLs, malformed responses
+5. **Security verification**: Test nonce validation and capability checks in admin
+
+### WordPress.org Compliance Notes
+- All functions/classes use `cfan_`/`CFAN_` prefixing
+- Comprehensive input sanitization and output escaping
+- Nonce verification on all admin forms
+- Text domain consistency throughout
+- No external dependencies or build processes required

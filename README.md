@@ -1,6 +1,8 @@
+![CF7 to ActionNetwork Integration](assets/banner-772x250.png)
+
 # CF7 to ActionNetwork Integration #
 **Contributors:** [procom.dev](https://procom.dev), [Mário Valney](https://mariovalney.com/me)  
-**Tags:** cf7, contact form, actionnetwork, integration, contact form 7, activism, nonprofit  
+**Tags:** contact form 7, action network, cf7, actionnetwork, integration  
 **Official website:** https://procom.dev/contact-form-7-cf7-to-actionnetwork-free-wordpress-plugin/  
 **Requires at least:** 4.7  
 **Tested up to:** 6.4  
@@ -126,6 +128,17 @@ Brazilian developer who is part of the [WordPress community](https://profiles.wo
 
 ### Can I help you?
 Yes! Visit the [GitHub repository](https://github.com/procom-dev/cf7-actionnetwork-integration) to contribute code, report issues, or suggest improvements.
+
+## Screenshots ##
+
+![Main section of the plugin](assets/screenshot-1.png)
+*Main section of the plugin, where you just enter the Action Network API Endpoint.*
+
+![Field mapping](assets/screenshot-2.png) 
+*The plugin automatically matches your fields from CF7 to the official Action Network's Core Fields.*
+
+![Tag management](assets/screenshot-3.png)
+*You can also add and remove tags to people submitting your form.*
 
 ## Installation ##
 
