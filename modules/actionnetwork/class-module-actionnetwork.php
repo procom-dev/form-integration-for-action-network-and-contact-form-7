@@ -71,7 +71,7 @@ if ( ! class_exists( 'CFAN_ActionNetwork_Module' ) ) {
             // Validate ActionNetwork URL
             if ( ! $this->validate_actionnetwork_url( $hook_url ) ) {
                 CFAN_Logger::error( "Invalid ActionNetwork URL: {$hook_url}" );
-                throw new Exception( esc_html__( 'Invalid ActionNetwork URL provided', 'contact-form-7-to-action-network-integration' ) );
+                throw new Exception( esc_html__( 'Invalid ActionNetwork URL provided', 'action-network-integration-for-contact-form-7' ) );
             }
 
             // Before modifying hook url logic

@@ -3,7 +3,7 @@
 /**
  * A helper to debug
  *
- * @package         Contact_Form_7_to_Action_Network_Integration
+ * @package         Action_Network_Integration_for_Contact_Form_7
  * @since           2.3.0
  */
 

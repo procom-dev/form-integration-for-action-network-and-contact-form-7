@@ -1,16 +1,16 @@
 <?php
 /**
  *
- * @package           Contact_Form_7_to_Action_Network_Integration
+ * @package           Action_Network_Integration_for_Contact_Form_7
  * @since             1.0.0
  *
- * Plugin Name:       Contact Form 7 to Action Network Integration
- * Plugin URI:        https://github.com/procom-dev/contact-form-7-to-action-network-integration
+ * Plugin Name:       Action Network integration for Contact Form 7
+ * Plugin URI:        https://github.com/procom-dev/action-network-integration-for-contact-form-7
  * Description:       Use Contact Form 7 to send data directly to ActionNetwork with automatic field mapping!
  * Version:           1.0.0
  * Author:            procom.dev
  * Author URI:        https://procom.dev
- * Text Domain:       contact-form-7-to-action-network-integration
+ * Text Domain:       action-network-integration-for-contact-form-7
  * Domain Path:       /languages
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -195,7 +195,7 @@ if ( ! class_exists( 'CFAN_Core' ) ) {
 
             // Definition of text domain
             if ( ! defined( 'CFAN_TEXTDOMAIN' ) ) {
-                define( 'CFAN_TEXTDOMAIN', 'contact-form-7-to-action-network-integration' );
+                define( 'CFAN_TEXTDOMAIN', 'action-network-integration-for-contact-form-7' );
             }
 
             // Running Modules (first of all)
