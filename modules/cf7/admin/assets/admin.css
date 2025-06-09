@@ -1,0 +1,150 @@
+/* CF7 ActionNetwork Integration Admin Styles */
+
+.cfan-panel {
+    max-width: 100%;
+}
+
+.cfan-section {
+    margin-bottom: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.cfan-section h3 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.cfan-field-group {
+    margin-bottom: 20px;
+}
+
+.cfan-field-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.cfan-field-group input[type="text"],
+.cfan-field-group input[type="url"],
+.cfan-field-group textarea {
+    width: 100%;
+    max-width: 600px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.cfan-field-group input[type="text"]:focus,
+.cfan-field-group input[type="url"]:focus,
+.cfan-field-group textarea:focus {
+    border-color: #0073aa;
+    box-shadow: 0 0 0 1px #0073aa;
+    outline: none;
+}
+
+.cfan-field-group .description {
+    margin-top: 5px;
+    color: #666;
+    font-style: italic;
+    font-size: 13px;
+}
+
+.cfan-url-validation {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 3px;
+    font-size: 13px;
+    display: none;
+}
+
+.cfan-url-validation.success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.cfan-url-validation.error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.cfan-url-validation.warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+.cfan-checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cfan-checkbox-field input[type="checkbox"] {
+    margin: 0;
+}
+
+.cfan-core-fields {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.cfan-core-fields ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cfan-core-fields li {
+    background: #fff;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+.cfan-help-text {
+    background: #e8f4f8;
+    border-left: 4px solid #0073aa;
+    padding: 12px 16px;
+    margin: 15px 0;
+}
+
+.cfan-help-text h4 {
+    margin: 0 0 8px 0;
+    color: #0073aa;
+}
+
+.cfan-help-text p {
+    margin: 0;
+    color: #333;
+}
+
+
+@media (max-width: 782px) {
+    .cfan-field-group input[type="text"],
+    .cfan-field-group input[type="url"],
+    .cfan-field-group textarea {
+        max-width: 100%;
+    }
+    
+    .cfan-core-fields ul {
+        grid-template-columns: 1fr;
+    }
+    
+}
