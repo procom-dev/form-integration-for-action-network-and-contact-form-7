@@ -10,7 +10,7 @@
  * Version:           1.0.0
  * Author:            procom.dev
  * Author URI:        https://procom.dev
- * Text Domain:       cf7-actionnetwork-integration
+ * Text Domain:       action-network-integration-for-contact-form-7
  * Domain Path:       /languages
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -195,7 +195,7 @@ if ( ! class_exists( 'CFAN_Core' ) ) {
 
             // Definition of text domain
             if ( ! defined( 'CFAN_TEXTDOMAIN' ) ) {
-                define( 'CFAN_TEXTDOMAIN', 'cf7-actionnetwork-integration' );
+                define( 'CFAN_TEXTDOMAIN', 'action-network-integration-for-contact-form-7' );
             }
 
             // Running Modules (first of all)

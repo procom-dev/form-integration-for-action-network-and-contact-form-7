@@ -84,7 +84,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
 
             echo '<div class="notice notice-error is-dismissible">';
             // translators: %1$s and %2$s are link tags, %3$s and %4$s are strong tags
-            echo '<p>' . sprintf( esc_html__( 'You need to install/activate %1$s Contact Form 7%2$s plugin to use %3$s CF7 to ActionNetwork %4$s', 'cf7-actionnetwork-integration' ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
+            echo '<p>' . sprintf( esc_html__( 'You need to install/activate %1$s Contact Form 7%2$s plugin to use %3$s CF7 to ActionNetwork %4$s', 'action-network-integration-for-contact-form-7' ), '<a href="http://contactform7.com/" target="_blank">', '</a>', '<strong>', '</strong>' );
 
             $screen = get_current_screen();
             if ( $screen->id == 'plugins' ) {
@@ -98,7 +98,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 $url = 'plugin-install.php?tab=search&s=Contact+form+7';
             }
 
-            echo '. <a href="' . esc_url( admin_url( $url ) ) . '">' . esc_html__( 'Do it now?', 'cf7-actionnetwork-integration' ) . '</a></p>';
+            echo '. <a href="' . esc_url( admin_url( $url ) ) . '">' . esc_html__( 'Do it now?', 'action-network-integration-for-contact-form-7' ) . '</a></p>';
             echo '</div>';
         }
 
@@ -110,7 +110,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
          */
         public function wpcf7_editor_panels( $panels ) {
             $panels['actionnetwork-panel'] = array(
-                'title'     => __( 'ActionNetwork', 'cf7-actionnetwork-integration' ),
+                'title'     => __( 'ActionNetwork', 'action-network-integration-for-contact-form-7' ),
                 'callback'  => [ $this, 'actionnetwork_panel_html' ],
             );
 
@@ -696,12 +696,12 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
 
             // Localize script with translatable strings
             wp_localize_script( 'cfan-admin-js', 'cfan_admin', [
-                'invalid_url_message' => __( 'Please enter a valid URL.', 'cf7-actionnetwork-integration' ),
-                'not_actionnetwork_message' => __( 'This URL is not from ActionNetwork. Please use an ActionNetwork URL.', 'cf7-actionnetwork-integration' ),
+                'invalid_url_message' => __( 'Please enter a valid URL.', 'action-network-integration-for-contact-form-7' ),
+                'not_actionnetwork_message' => __( 'This URL is not from ActionNetwork. Please use an ActionNetwork URL.', 'action-network-integration-for-contact-form-7' ),
                 // translators: %s is the ActionNetwork action type (e.g., "form", "petition")
-                'detected_type_message' => __( 'ActionNetwork %s detected. This looks correct!', 'cf7-actionnetwork-integration' ),
-                'unknown_pattern_message' => __( 'This ActionNetwork URL pattern is not recognized, but it may still work.', 'cf7-actionnetwork-integration' ),
-                'url_required_message' => __( 'Please enter an ActionNetwork URL to activate the integration.', 'cf7-actionnetwork-integration' )
+                'detected_type_message' => __( 'ActionNetwork %s detected. This looks correct!', 'action-network-integration-for-contact-form-7' ),
+                'unknown_pattern_message' => __( 'This ActionNetwork URL pattern is not recognized, but it may still work.', 'action-network-integration-for-contact-form-7' ),
+                'url_required_message' => __( 'Please enter an ActionNetwork URL to activate the integration.', 'action-network-integration-for-contact-form-7' )
             ]);
         }
 
