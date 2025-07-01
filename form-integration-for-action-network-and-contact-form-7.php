@@ -79,9 +79,6 @@ if ( ! class_exists( 'CFAN_Core' ) ) {
          * @access   private
          */
         private function define_hooks() {
-            // Internationalization
-            $this->add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
-
             // Activation Hook
             register_activation_hook( __FILE__, array( $this, 'on_activation' ) );
         }
@@ -163,16 +160,6 @@ if ( ! class_exists( 'CFAN_Core' ) ) {
             $this->filters = $this->add_hook( $this->filters, $hook, $callback, $priority, $accepted_args );
         }
 
-        /**
-         * Define the locale for this plugin for internationalization.
-         *
-         *
-         * @since    1.0.0
-         * @access   private
-         */
-        public function load_plugin_textdomain() {
-            load_plugin_textdomain( CFAN_TEXTDOMAIN, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-        }
 
         /**
          * Run the plugin.
