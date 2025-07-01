@@ -67,35 +67,35 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
     <?php wp_nonce_field( 'cfan_save_settings', 'cfan_nonce' ); ?>
 
     <h2>
-        <?php esc_html_e( 'ActionNetwork Integration', 'action-network-integration-for-contact-form-7' ); ?>
+        <?php esc_html_e( 'ActionNetwork Integration', 'form-integration-for-action-network-and-contact-form-7' ); ?>
     </h2>
 
     <div class="cfan-section">
-        <h3><?php esc_html_e( 'Configuration', 'action-network-integration-for-contact-form-7' ); ?></h3>
+        <h3><?php esc_html_e( 'Configuration', 'form-integration-for-action-network-and-contact-form-7' ); ?></h3>
 
         <div class="cfan-field-group">
             <label for="cfan-actionnetwork-hook-url">
-                <?php esc_html_e( 'ActionNetwork API Endpoint URL', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'ActionNetwork API Endpoint URL', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </label>
             <input type="url" id="cfan-actionnetwork-hook-url" name="cfan-actionnetwork-hook-url" value="<?php echo esc_attr( implode( PHP_EOL, $hook_url ) ); ?>" placeholder="https://actionnetwork.org/api/v2/forms/your-form-id">
             <?php if ( $activate && empty( $hook_url ) ): ?>
                 <div class="cfan-url-validation error">
-                    <?php esc_html_e( 'You must enter an ActionNetwork API Endpoint URL', 'action-network-integration-for-contact-form-7' ); ?>
+                    <?php esc_html_e( 'You must enter an ActionNetwork API Endpoint URL', 'form-integration-for-action-network-and-contact-form-7' ); ?>
                 </div>
             <?php endif; ?>
             <p class="description">
-                <?php esc_html_e( 'Copy the API Endpoint URL from your ActionNetwork action page. You can find it in the right sidebar when editing your form, petition, or event.', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'Copy the API Endpoint URL from your ActionNetwork action page. You can find it in the right sidebar when editing your form, petition, or event.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>
         </div>
 
 
         <div class="cfan-field-group">
             <label for="cfan-source-name">
-                <?php esc_html_e( 'Source Name', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'Source Name', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </label>
             <input type="text" id="cfan-source-name" name="cfan-source-name" value="<?php echo esc_attr( $source_name ); ?>" placeholder="contact-form-7">
             <p class="description">
-                <?php esc_html_e( 'This will be sent as the source identifier to ActionNetwork. The website URL where the form is submitted will be sent as the website referrer.', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'This will be sent as the source identifier to ActionNetwork. The website URL where the form is submitted will be sent as the website referrer.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>
         </div>
 
@@ -103,33 +103,33 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
             <div class="cfan-checkbox-field">
                 <input type="checkbox" id="cfan-enable-autoresponse" name="cfan-enable-autoresponse" value="1" <?php checked( $enable_autoresponse, '1' ); ?>>
                 <label for="cfan-enable-autoresponse">
-                    <?php esc_html_e( 'Enable ActionNetwork autoresponse email', 'action-network-integration-for-contact-form-7' ); ?>
+                    <?php esc_html_e( 'Enable ActionNetwork autoresponse email', 'form-integration-for-action-network-and-contact-form-7' ); ?>
                 </label>
             </div>
             <p class="description">
-                <?php esc_html_e( 'When enabled, ActionNetwork will send its configured autoresponse email to the person who submitted the form.', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'When enabled, ActionNetwork will send its configured autoresponse email to the person who submitted the form.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>
         </div>
     </div>
 
     <div class="cfan-section">
-        <h3><?php esc_html_e( 'Field Mapping', 'action-network-integration-for-contact-form-7' ); ?></h3>
+        <h3><?php esc_html_e( 'Field Mapping', 'form-integration-for-action-network-and-contact-form-7' ); ?></h3>
         
         <div class="cfan-field-group">
             <div class="cfan-checkbox-field">
                 <input type="checkbox" id="cfan-auto-detect-country" name="cfan-auto-detect-country" value="1" <?php checked( $auto_detect_country, '1' ); ?>>
                 <label for="cfan-auto-detect-country">
-                    <?php esc_html_e( 'Auto-detect user country when not provided in form', 'action-network-integration-for-contact-form-7' ); ?>
+                    <?php esc_html_e( 'Auto-detect user country when not provided in form', 'form-integration-for-action-network-and-contact-form-7' ); ?>
                 </label>
             </div>
             <p class="description">
-                <?php esc_html_e( 'Automatically detects the user\'s country based on their IP address when no country field is filled in the form.', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'Automatically detects the user\'s country based on their IP address when no country field is filled in the form.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>
         </div>
         
         <div class="cfan-core-fields">
-            <h4><?php esc_html_e( 'Automatic field mappings:', 'action-network-integration-for-contact-form-7' ); ?></h4>
-            <p><?php esc_html_e( 'The plugin automatically recognizes common form field names and maps them to ActionNetwork\'s person structure. If your CF7 form uses any of these field names, they will be mapped correctly:', 'action-network-integration-for-contact-form-7' ); ?></p>
+            <h4><?php esc_html_e( 'Automatic field mappings:', 'form-integration-for-action-network-and-contact-form-7' ); ?></h4>
+            <p><?php esc_html_e( 'The plugin automatically recognizes common form field names and maps them to ActionNetwork\'s person structure. If your CF7 form uses any of these field names, they will be mapped correctly:', 'form-integration-for-action-network-and-contact-form-7' ); ?></p>
             <ul>
                 <li><strong>your-email, email, email-address</strong> → Email address</li>
                 <li><strong>your-name, first-name, firstname, given-name, given_name</strong> → First name</li>
@@ -144,31 +144,31 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
         </div>
         
         <div class="cfan-help-text" style="background: #fff3cd; border-left-color: #ffc107;">
-            <h4 style="color: #856404;"><?php esc_html_e( 'Important: Custom Fields', 'action-network-integration-for-contact-form-7' ); ?></h4>
-            <p style="color: #856404;"><?php esc_html_e( 'Any form fields that don\'t match the patterns above will be sent as custom fields to ActionNetwork. Make sure your ActionNetwork action is configured to accept custom fields if you use non-standard field names.', 'action-network-integration-for-contact-form-7' ); ?></p>
+            <h4 style="color: #856404;"><?php esc_html_e( 'Important: Custom Fields', 'form-integration-for-action-network-and-contact-form-7' ); ?></h4>
+            <p style="color: #856404;"><?php esc_html_e( 'Any form fields that don\'t match the patterns above will be sent as custom fields to ActionNetwork. Make sure your ActionNetwork action is configured to accept custom fields if you use non-standard field names.', 'form-integration-for-action-network-and-contact-form-7' ); ?></p>
         </div>
     </div>
 
     <div class="cfan-section">
-        <h3><?php esc_html_e( 'ActionNetwork Tags', 'action-network-integration-for-contact-form-7' ); ?></h3>
+        <h3><?php esc_html_e( 'ActionNetwork Tags', 'form-integration-for-action-network-and-contact-form-7' ); ?></h3>
         
         <div class="cfan-field-group">
             <label for="cfan-add-tags">
-                <?php esc_html_e( 'Add Tags', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'Add Tags', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </label>
-            <textarea id="cfan-add-tags" name="cfan-add-tags" rows="3" placeholder="<?php esc_attr_e( 'volunteer, member, subscriber', 'action-network-integration-for-contact-form-7' ); ?>"><?php echo esc_textarea( implode( ', ', $add_tags ) ); ?></textarea>
+            <textarea id="cfan-add-tags" name="cfan-add-tags" rows="3" placeholder="<?php esc_attr_e( 'volunteer, member, subscriber', 'form-integration-for-action-network-and-contact-form-7' ); ?>"><?php echo esc_textarea( implode( ', ', $add_tags ) ); ?></textarea>
             <p class="description">
-                <?php esc_html_e( 'Tags to add to the person\'s record in ActionNetwork. Separate multiple tags with commas. These tags must already exist in your ActionNetwork account.', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'Tags to add to the person\'s record in ActionNetwork. Separate multiple tags with commas. These tags must already exist in your ActionNetwork account.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>
         </div>
 
         <div class="cfan-field-group">
             <label for="cfan-remove-tags">
-                <?php esc_html_e( 'Remove Tags', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'Remove Tags', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </label>
-            <textarea id="cfan-remove-tags" name="cfan-remove-tags" rows="3" placeholder="<?php esc_attr_e( 'inactive, unsubscribed', 'action-network-integration-for-contact-form-7' ); ?>"><?php echo esc_textarea( implode( ', ', $remove_tags ) ); ?></textarea>
+            <textarea id="cfan-remove-tags" name="cfan-remove-tags" rows="3" placeholder="<?php esc_attr_e( 'inactive, unsubscribed', 'form-integration-for-action-network-and-contact-form-7' ); ?>"><?php echo esc_textarea( implode( ', ', $remove_tags ) ); ?></textarea>
             <p class="description">
-                <?php esc_html_e( 'Tags to remove from the person\'s record in ActionNetwork. Separate multiple tags with commas. Tag addition runs before tag removal.', 'action-network-integration-for-contact-form-7' ); ?>
+                <?php esc_html_e( 'Tags to remove from the person\'s record in ActionNetwork. Separate multiple tags with commas. Tag addition runs before tag removal.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>
         </div>
     </div>

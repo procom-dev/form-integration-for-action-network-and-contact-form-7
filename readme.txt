@@ -1,4 +1,4 @@
-=== Action Network integration for Contact Form 7 ===
+=== Form Integration for Action Network and Contact Form 7 ===
 Contributors: procomdev, mariovalney
 Tags: contact form 7, action network, cf7, actionnetwork, integration
 Requires at least: 4.7  
@@ -14,7 +14,7 @@ Seamlessly connect Contact Form 7 to ActionNetwork with smart field mapping, cou
 
 [Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/) is a widely-used plugin by millions of WordPress websites for creating forms. 
 
-The **Action Network integration for Contact Form 7** plugin provides a powerful bridge between your WordPress forms and ActionNetwork's organizing platform. Designed for nonprofits, advocacy groups, and political campaigns, this plugin automatically maps CF7 form fields to ActionNetwork's person data structure with intelligent field recognition and enhanced features.
+The **Form Integration for Action Network and Contact Form 7** plugin provides a powerful bridge between your WordPress forms and ActionNetwork's organizing platform. Designed for nonprofits, advocacy groups, and political campaigns, this plugin automatically maps CF7 form fields to ActionNetwork's person data structure with intelligent field recognition and enhanced features.
 
 = Key Features =
 
@@ -122,7 +122,7 @@ Yes, you can add multiple URLs (one per line) to send the same form data to diff
 == Installation ==
 
 1. Install [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) and activate it.
-2. Install "Action Network integration for Contact Form 7" by using the plugins dashboard or upload the entire `action-network-integration-for-contact-form-7` folder to the `/wp-content/plugins/` directory.
+2. Install "Form Integration for Action Network and Contact Form 7" by using the plugins dashboard or upload the entire `form-integration-for-action-network-and-contact-form-7` folder to the `/wp-content/plugins/` directory.
 3. Activate the plugin through the 'Plugins' menu in WordPress.
 4. You will find the 'ActionNetwork' tab in the form configuration.
 
