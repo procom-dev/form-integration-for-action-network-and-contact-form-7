@@ -119,6 +119,34 @@ The plugin tries multiple methods in order:
 = Can I add multiple ActionNetwork URLs? =
 Yes, you can add multiple URLs (one per line) to send the same form data to different ActionNetwork actions.
 
+== External Services ==
+
+This plugin connects to external services to provide its functionality. Here are the third-party services used:
+
+= ActionNetwork API =
+**What it's used for**: This plugin's primary function is to send form submission data to ActionNetwork's organizing platform for contact management and campaign actions.
+
+**What data is sent**: All form field data submitted through Contact Form 7, including but not limited to names, email addresses, phone numbers, addresses, and any custom fields. This data is formatted according to ActionNetwork's person data structure.
+
+**When data is sent**: Data is transmitted to ActionNetwork every time a Contact Form 7 form is submitted on forms where ActionNetwork integration is configured.
+
+**Service provider**: ActionNetwork  
+**Terms of service**: https://actionnetwork.org/terms  
+**Privacy policy**: https://actionnetwork.org/privacy
+
+= IP Geolocation Service (ipapi.co) =
+**What it's used for**: Automatic country detection when the country auto-detection feature is enabled and the user's country cannot be determined through other methods.
+
+**What data is sent**: The user's IP address is sent to determine their country location.
+
+**When data is sent**: Only when country auto-detection is enabled and a form is submitted without a country field or when other country detection methods fail.
+
+**Service provider**: ipapi.co  
+**Terms of service**: https://ipapi.co/terms/  
+**Privacy policy**: https://ipapi.co/privacy/
+
+**Note**: This service is only used as a fallback when other country detection methods (GeoIP functions, CloudFlare headers, browser language) are unavailable. You can disable country auto-detection in the plugin settings if you prefer not to use this service.
+
 == Installation ==
 
 1. Install [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) and activate it.

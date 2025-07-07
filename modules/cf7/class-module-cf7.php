@@ -505,8 +505,13 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 if ( $tag->has_option( 'free_text' ) && in_array( $tag->basetype, [ 'checkbox', 'radio' ] ) ) {
                     $free_text_label = end( $tag->values );
                     $free_text_name  = $tag->name . '_free_text';
-                    // phpcs:ignore WordPress.Security.NonceVerification.Missing -- CF7 handles nonce verification
-                    $free_text_value = ( ! empty( $_POST[ $free_text_name ] ) ) ? sanitize_text_field( wp_unslash( $_POST[ $free_text_name ] ) ) : '';
+                    
+                    // Use CF7 submission data instead of direct $_POST access for security
+                    $free_text_value = '';
+                    if ( ! empty( $submission ) ) {
+                        $posted_data = $submission->get_posted_data();
+                        $free_text_value = isset( $posted_data[ $free_text_name ] ) ? sanitize_text_field( wp_unslash( $posted_data[ $free_text_name ] ) ) : '';
+                    }
 
                     if ( is_array( $value ) ) {
                         foreach ( $value as $key => $v ) {
@@ -567,8 +572,13 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 // Support to "_raw_" values. @see WPCF7_MailTag::__construct()
                 if ( $mail_tag->get_option( 'do_not_heat' ) ) {
                     $value = apply_filters( 'wpcf7_special_mail_tags', '', $mail_tag->tag_name(), false, $mail_tag );
-                    // phpcs:ignore WordPress.Security.NonceVerification.Missing -- CF7 handles nonce verification
-                    $value = isset( $_POST[ $mail_tag->field_name() ] ) ? sanitize_text_field( wp_unslash( $_POST[ $mail_tag->field_name() ] ) ) : '';
+                    
+                    // Use CF7 submission data instead of direct $_POST access for security
+                    $submission = WPCF7_Submission::get_instance();
+                    if ( ! empty( $submission ) ) {
+                        $posted_data = $submission->get_posted_data();
+                        $value = isset( $posted_data[ $mail_tag->field_name() ] ) ? sanitize_text_field( wp_unslash( $posted_data[ $mail_tag->field_name() ] ) ) : '';
+                    }
                 }
 
                 $value = apply_filters( 'wpcf7_special_mail_tags', $value, $mail_tag->tag_name(), false, $mail_tag );
