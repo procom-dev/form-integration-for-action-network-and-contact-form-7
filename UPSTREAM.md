@@ -37,7 +37,7 @@ re-implemented by hand.
 | 5.1.0 | `random_bytes()` instead of `uniqid()` for upload dirs | Security | **Ported** in 1.0.1 |
 | 5.1.0 | `wp_add_inline_script()` instead of raw `<script>` echo | Security | N/A — already using `wp_localize_script` |
 | 5.0.1 | SSRF: `wp_safe_remote_request()` (CVE-2026-11395) | Security | **Ported** in 1.0.1 (`wp_safe_remote_post`/`wp_safe_remote_get`) |
-| 5.0.0 | CF7 Multi-Step Forms support + `*_cf7msm_posted_data` filter | Feature | **Planned** — port as a follow-up change |
+| 5.0.0 | CF7 Multi-Step Forms support + `*_cf7msm_posted_data` filter | Feature | **Ported** in 1.0.2 (`cfan_get_data_from_cf7msm_posted_data`) |
 | 5.0.0 | Mail tags in headers / headers replaceable by data | Feature | Deferred — evaluate with the header feature |
 | 4.0.x | Templates, advanced custom body, base64 files, Slack template, error notifications | Webhook-specific | Skip — does not fit ActionNetwork's structured person API |
 | ≤3.x | Placeholders, multiple URLs, raw values, custom header option | Mixed | Already covered by the rewrite / not applicable |

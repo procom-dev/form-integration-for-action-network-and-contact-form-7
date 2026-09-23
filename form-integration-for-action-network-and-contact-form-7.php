@@ -7,7 +7,7 @@
  * Plugin Name:       Form Integration for Action Network and Contact Form 7
  * Plugin URI:        https://github.com/procom-dev/form-integration-for-action-network-and-contact-form-7
  * Description:       Use Contact Form 7 to send data directly to ActionNetwork with automatic field mapping!
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            procom.dev
  * Author URI:        https://procom.dev
  * Text Domain:       form-integration-for-action-network-and-contact-form-7
@@ -168,7 +168,7 @@ if ( ! class_exists( 'CFAN_Core' ) ) {
          */
         public function run() {
             // Definitions to plugin
-            define( 'CFAN_VERSION', '1.0.1' );
+            define( 'CFAN_VERSION', '1.0.2' );
             define( 'CFAN_PLUGIN_FILE', __FILE__ );
             define( 'CFAN_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
             define( 'CFAN_PLUGIN_PATH', WP_PLUGIN_DIR . '/' . dirname( CFAN_PLUGIN_BASENAME ) );

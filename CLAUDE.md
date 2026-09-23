@@ -105,6 +105,7 @@ cf7-actionnetwork-integration/
 - `cfan_hook_url_placeholder` - Customize URL placeholder replacement
 - `cfan_get_data_from_contact_form` - Filter form data extraction
 - `cfan_get_data_from_special_mail_tags` - Filter special mail tag data
+- `cfan_get_data_from_cf7msm_posted_data` - Toggle merging CF7 Multi-Step Forms data (default true)
 
 ### Logging Functions
 - `CFAN_Logger::info($message)` - Info level logging

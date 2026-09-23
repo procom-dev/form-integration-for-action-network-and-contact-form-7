@@ -548,6 +548,39 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
             }
 
             /**
+             * Support for the "Contact Form 7 Multi-Step Forms" plugin.
+             *
+             * When a form is one step of a multi-step flow, the fields from the
+             * previous steps are only available through CF7MSM. Merge them in so
+             * the full submission reaches ActionNetwork. Current-step values take
+             * precedence over any matching key from earlier steps.
+             *
+             * Set the 'cfan_get_data_from_cf7msm_posted_data' filter to false to
+             * disable this behavior.
+             *
+             * @since    1.0.2
+             * @param    bool           $should_support   Whether to merge CF7MSM data. Default true.
+             * @param    ContactForm    $contact_form     ContactForm obj from 'wpcf7_mail_sent' action.
+             */
+            $should_support_cf7msm = apply_filters( 'cfan_get_data_from_cf7msm_posted_data', true, $contact_form );
+
+            if ( $should_support_cf7msm && function_exists( 'cf7msm_get' ) ) {
+                $prev_data = cf7msm_get( 'cf7msm_posted_data', '' );
+
+                if ( is_array( $prev_data ) && ! empty( $prev_data ) ) {
+                    // Drop CF7MSM/CF7 internal bookkeeping keys.
+                    foreach ( array_keys( $prev_data ) as $prev_key ) {
+                        if ( strpos( $prev_key, 'cf7msm' ) === 0 || strpos( $prev_key, '_' ) === 0 ) {
+                            unset( $prev_data[ $prev_key ] );
+                        }
+                    }
+
+                    // Current step overrides earlier steps on matching keys.
+                    $data = array_merge( $prev_data, $data );
+                }
+            }
+
+            /**
              * You can filter data retrieved from Contact Form tags with 'cfan_get_data_from_contact_form'
              *
              * @param $data             Array 'field => data'
