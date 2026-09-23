@@ -208,8 +208,10 @@ if ( ! class_exists( 'CFAN_ActionNetwork_Module' ) ) {
                 }
             }
 
-            // If doesn't match known patterns, allow anyway
-            // (could be a custom webhook or URL we don't know)
+            // Host is already confirmed to be actionnetwork.org above; the path
+            // check is only advisory. Allow unrecognized actionnetwork.org paths
+            // so new ActionNetwork endpoint types keep working without a plugin
+            // update. This does not permit any non-actionnetwork.org host.
             return true;
         }
 
@@ -227,7 +229,10 @@ if ( ! class_exists( 'CFAN_ActionNetwork_Module' ) ) {
 
             for ( $i = 0; $i < $retries; $i++ ) {
 
-                $response = wp_remote_post( $url, $args );
+                // Use the "safe" HTTP API so outbound requests are blocked from
+                // reaching private, loopback and link-local addresses (SSRF
+                // hardening, per upstream 5.0.1 / CVE-2026-11395).
+                $response = wp_safe_remote_post( $url, $args );
 
                 // If successful (no WP error and response code < 400), return
                 if ( ! is_wp_error( $response ) ) {

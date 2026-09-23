@@ -429,7 +429,15 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
 
             // Upload Info
             $wp_upload_dir = wp_get_upload_dir();
-            $upload_path = CFAN_UPLOAD_DIR . '/' . $contact_form->id() . '/' . uniqid();
+            // Unpredictable per-submission subdirectory. uniqid() is derived
+            // from the system clock and is guessable, which can expose uploaded
+            // files; use a cryptographically-random name instead (upstream 5.1.0).
+            try {
+                $upload_unique = bin2hex( random_bytes( 16 ) );
+            } catch ( Exception $e ) {
+                $upload_unique = wp_generate_password( 32, false );
+            }
+            $upload_path = CFAN_UPLOAD_DIR . '/' . $contact_form->id() . '/' . $upload_unique;
 
             $upload_url = $wp_upload_dir['baseurl'] . '/' . $upload_path;
             $upload_dir = $wp_upload_dir['basedir'] . '/' . $upload_path;
@@ -537,6 +545,39 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 }
 
                 $data[ $key ] = $value;
+            }
+
+            /**
+             * Support for the "Contact Form 7 Multi-Step Forms" plugin.
+             *
+             * When a form is one step of a multi-step flow, the fields from the
+             * previous steps are only available through CF7MSM. Merge them in so
+             * the full submission reaches ActionNetwork. Current-step values take
+             * precedence over any matching key from earlier steps.
+             *
+             * Set the 'cfan_get_data_from_cf7msm_posted_data' filter to false to
+             * disable this behavior.
+             *
+             * @since    1.0.2
+             * @param    bool           $should_support   Whether to merge CF7MSM data. Default true.
+             * @param    ContactForm    $contact_form     ContactForm obj from 'wpcf7_mail_sent' action.
+             */
+            $should_support_cf7msm = apply_filters( 'cfan_get_data_from_cf7msm_posted_data', true, $contact_form );
+
+            if ( $should_support_cf7msm && function_exists( 'cf7msm_get' ) ) {
+                $prev_data = cf7msm_get( 'cf7msm_posted_data', '' );
+
+                if ( is_array( $prev_data ) && ! empty( $prev_data ) ) {
+                    // Drop CF7MSM/CF7 internal bookkeeping keys.
+                    foreach ( array_keys( $prev_data ) as $prev_key ) {
+                        if ( strpos( $prev_key, 'cf7msm' ) === 0 || strpos( $prev_key, '_' ) === 0 ) {
+                            unset( $prev_data[ $prev_key ] );
+                        }
+                    }
+
+                    // Current step overrides earlier steps on matching keys.
+                    $data = array_merge( $prev_data, $data );
+                }
             }
 
             /**
@@ -1089,7 +1130,9 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
         private function detect_country_via_ipapi( $ip ) {
             $api_url = "https://ipapi.co/{$ip}/country/";
             
-            $response = wp_remote_get( $api_url, [
+            // "Safe" HTTP API blocks requests to private/loopback/link-local
+            // hosts (SSRF hardening, per upstream 5.0.1 / CVE-2026-11395).
+            $response = wp_safe_remote_get( $api_url, [
                 'timeout' => 5,
                 'user-agent' => 'CF7-ActionNetwork-Integration/' . CFAN_VERSION
             ]);

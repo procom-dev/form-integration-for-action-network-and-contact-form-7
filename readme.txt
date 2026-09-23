@@ -3,7 +3,7 @@ Contributors: procomdev, mariovalney
 Tags: contact form 7, action network, cf7, actionnetwork, integration
 Requires at least: 4.7  
 Tested up to: 6.8  
-Stable tag: 1.0.0  
+Stable tag: 1.0.2  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
@@ -160,6 +160,14 @@ This plugin connects to external services to provide its functionality. Here are
 3. You can also add and remove tags to people submitting you form.
 
 == Changelog ==
+
+= 1.0.2 =
+* **New**: Support for the "Contact Form 7 Multi-Step Forms" (CF7MSM) plugin — fields from earlier steps are now merged into the submission sent to ActionNetwork (ports upstream 5.0.0).
+* **New filter**: `cfan_get_data_from_cf7msm_posted_data` to disable or conditionally control CF7MSM data merging.
+
+= 1.0.1 =
+* **Security**: Outbound requests now use the "safe" HTTP API (`wp_safe_remote_post`/`wp_safe_remote_get`), blocking requests to private, loopback, and link-local addresses (SSRF hardening; ports upstream 5.0.1 / CVE-2026-11395).
+* **Security**: Uploaded-file directories now use cryptographically-random names instead of the guessable `uniqid()` (ports upstream 5.1.0).
 
 = 1.0.0 =
 * **Enhanced Integration**: Complete rewrite with improved ActionNetwork API integration
