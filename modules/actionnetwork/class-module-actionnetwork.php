@@ -208,8 +208,10 @@ if ( ! class_exists( 'CFAN_ActionNetwork_Module' ) ) {
                 }
             }
 
-            // If doesn't match known patterns, allow anyway
-            // (could be a custom webhook or URL we don't know)
+            // Host is already confirmed to be actionnetwork.org above; the path
+            // check is only advisory. Allow unrecognized actionnetwork.org paths
+            // so new ActionNetwork endpoint types keep working without a plugin
+            // update. This does not permit any non-actionnetwork.org host.
             return true;
         }
 
