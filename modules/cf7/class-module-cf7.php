@@ -429,7 +429,15 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
 
             // Upload Info
             $wp_upload_dir = wp_get_upload_dir();
-            $upload_path = CFAN_UPLOAD_DIR . '/' . $contact_form->id() . '/' . uniqid();
+            // Unpredictable per-submission subdirectory. uniqid() is derived
+            // from the system clock and is guessable, which can expose uploaded
+            // files; use a cryptographically-random name instead (upstream 5.1.0).
+            try {
+                $upload_unique = bin2hex( random_bytes( 16 ) );
+            } catch ( Exception $e ) {
+                $upload_unique = wp_generate_password( 32, false );
+            }
+            $upload_path = CFAN_UPLOAD_DIR . '/' . $contact_form->id() . '/' . $upload_unique;
 
             $upload_url = $wp_upload_dir['baseurl'] . '/' . $upload_path;
             $upload_dir = $wp_upload_dir['basedir'] . '/' . $upload_path;
@@ -1089,7 +1097,9 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
         private function detect_country_via_ipapi( $ip ) {
             $api_url = "https://ipapi.co/{$ip}/country/";
             
-            $response = wp_remote_get( $api_url, [
+            // "Safe" HTTP API blocks requests to private/loopback/link-local
+            // hosts (SSRF hardening, per upstream 5.0.1 / CVE-2026-11395).
+            $response = wp_safe_remote_get( $api_url, [
                 'timeout' => 5,
                 'user-agent' => 'CF7-ActionNetwork-Integration/' . CFAN_VERSION
             ]);
