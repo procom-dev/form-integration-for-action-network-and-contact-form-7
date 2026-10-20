@@ -5,161 +5,158 @@
 **Tags:** contact form 7, action network, cf7, actionnetwork, integration  
 **Official website:** https://github.com/procom-dev/form-integration-for-action-network-and-contact-form-7  
 **Requires at least:** 4.7  
-**Tested up to:** 7.1.3  
-**Stable tag:** trunk  
+**Tested up to:** 7.1  
+**Stable tag:** 1.0.4  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
-Seamlessly connect Contact Form 7 to ActionNetwork with smart field mapping, country detection, and comprehensive tagging support!
+Send Contact Form 7 submissions to ActionNetwork. The plugin maps your form fields to ActionNetwork's fields, can fill in the visitor's country, and can add or remove tags.
 
 ## Description ##
 
-[Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/) is a widely-used plugin by millions of WordPress websites for creating forms. 
+[Contact Form 7 (CF7)](https://wordpress.org/plugins/contact-form-7/) is one of the most common form plugins on WordPress. This plugin takes what people submit through a CF7 form and sends it to an ActionNetwork form, petition, event, fundraising page or advocacy campaign. We built it for nonprofits, advocacy groups and campaigns that already collect sign-ups on their WordPress site and want them to land in ActionNetwork.
 
-The **Form Integration for Action Network and Contact Form 7** plugin provides a powerful bridge between your WordPress forms and ActionNetwork's organizing platform. Designed for nonprofits, advocacy groups, and political campaigns, this plugin automatically maps CF7 form fields to ActionNetwork's person data structure with intelligent field recognition and enhanced features.
+What it does:
 
-### Key Features ###
+- Recognizes common field names like `your-email` or `first-name` and maps them to ActionNetwork's person fields.
+- Fills in the country when your form doesn't ask for it.
+- Adds or removes ActionNetwork tags on each submission.
+- Lets you turn ActionNetwork's autoresponse on or off, and skips CF7's own emails so people don't get two.
+- Records a source name and the referring URL.
+- Retries failed requests with exponential backoff.
+- Uses nonces, sanitization and capability checks, as WordPress.org requires.
+- Checks the ActionNetwork URL as you type it in the admin screen.
 
-🎯 **Smart Field Mapping**: Automatically recognizes common form field patterns and maps them to ActionNetwork's standard fields  
-🌍 **Auto Country Detection**: Automatically detects user location when country isn't provided in forms  
-🏷️ **Advanced Tagging**: Add or remove tags from ActionNetwork contacts with simple configuration  
-📧 **Email Integration**: Control ActionNetwork autoresponse emails and skip CF7 emails to prevent duplicates  
-🔒 **Security First**: WordPress.org compliant with proper nonces, sanitization, and permission checks  
-🎨 **Modern Admin UI**: Clean, responsive interface with real-time URL validation  
-📊 **Source Tracking**: Automatic referrer data and custom source identification  
-🔄 **Retry Logic**: Built-in exponential backoff for reliable delivery  
+ActionNetwork and the CF7 developers had nothing to do with this plugin.
 
-Disclaimer: This plugin was created without any encouragement from ActionNetwork or CF7 developers.
+### How to use it ###
 
-### How to Use ###
+1. Create a Form, Petition, Event, Fundraising Page or Advocacy Campaign in ActionNetwork.
+2. While editing it, copy the API Endpoint URL from the right sidebar.
+3. In Contact Form 7, open the "ActionNetwork" tab of your form and paste the URL. That's enough to turn the integration on; there's no separate switch.
+4. If you want, set up country detection, tags, a source name and autoresponse.
 
-Setting up the integration is simple:
+### Supported ActionNetwork actions ###
 
-1. **Create an ActionNetwork Action**: Set up a Form, Petition, Event, Fundraising Page, or Advocacy Campaign in ActionNetwork
-2. **Get the API Endpoint**: Copy the API Endpoint URL from the right sidebar when editing your action
-3. **Configure CF7 Form**: In Contact Form 7, go to the 'ActionNetwork' tab and paste your URL
-4. **Smart Configuration**: The plugin automatically activates when you add a URL - no separate activation needed
-5. **Optional Enhancements**: Configure country detection, tags, source tracking, and autoresponse settings
+The plugin works out the action type from the URL and posts to the right endpoint:
 
-### Supported ActionNetwork Actions ###
+- Forms → `/submissions`
+- Petitions → `/signatures`
+- Events → `/attendances`
+- Fundraising pages → `/donations`
+- Advocacy campaigns → `/outreaches`
 
-The plugin automatically detects and properly formats data for:
-- **Forms** → `/submissions`
-- **Petitions** → `/signatures` 
-- **Events** → `/attendances`
-- **Fundraising Pages** → `/donations`
-- **Advocacy Campaigns** → `/outreaches`
+### Field mapping ###
 
-### Smart Field Mapping ###
+If your CF7 fields use one of these names, the plugin maps them for you:
 
-The plugin intelligently recognizes common CF7 field names and automatically maps them to ActionNetwork's person structure:
+| CF7 field name | ActionNetwork field |
+| --- | --- |
+| `your-email`, `email`, `email-address` | Email address |
+| `your-name`, `first-name`, `firstname`, `given-name` | First name |
+| `your-last-name`, `last-name`, `lastname`, `family-name`, `surname` | Last name |
+| `your-phone`, `phone`, `phone-number`, `telephone`, `mobile` | Phone number |
+| `your-address`, `address`, `street-address` | Street address |
+| `your-city`, `city`, `locality`, `town` | City |
+| `your-state`, `state`, `province`, `region` | State/region |
+| `your-zip`, `zip`, `zipcode`, `postal-code` | Postal code |
+| `your-country`, `country` | Country |
 
-**Email Variations**:
-`your-email`, `email`, `email-address` → Email address
+Any other field goes to ActionNetwork as a custom field.
 
-**Name Variations**:
-`your-name`, `first-name`, `firstname`, `given-name` → First name  
-`your-last-name`, `last-name`, `lastname`, `family-name`, `surname` → Last name
+### Other options ###
 
-**Contact Information**:
-`your-phone`, `phone`, `phone-number`, `telephone`, `mobile` → Phone number
+Country detection looks up the visitor's country from their IP address, CloudFlare's country header, or their browser language.
 
-**Address Components**:
-`your-address`, `address`, `street-address` → Street address  
-`your-city`, `city`, `locality`, `town` → City  
-`your-state`, `state`, `province`, `region` → State/Region  
-`your-zip`, `zip`, `zipcode`, `postal-code` → Postal code  
-`your-country`, `country` → Country
+Tags: give a comma-separated list of tags to add to each new contact, and another of tags to remove. Both run on every submission.
 
-**Custom Fields**: Any fields that don't match these patterns are automatically included as custom fields in ActionNetwork.
+Source tracking: set a source name for the campaign. The plugin also sends the referring URL and picks up `?source=` from the page URL.
 
-### Advanced Features ###
-
-**Country Auto-Detection**: When enabled, automatically detects user's country using:
-- IP geolocation services
-- CloudFlare country headers
-- Browser language preferences
-
-**Tag Management**: 
-- Add tags to new contacts (comma-separated list)
-- Remove specific tags from contacts
-- Tag operations run automatically on form submission
-
-**Source Tracking**:
-- Configurable source name for campaign tracking
-- Automatic referrer URL capture
-- Support for `?source=` URL parameters
-
-### Frequently Asked Questions ###
+### FAQ ###
 
 #### Does it work with Gutenberg and WordPress 6+?
-Yes! The plugin is fully compatible with modern WordPress (5.0+) and the Gutenberg editor.
+Yes. It works with WordPress 5.0 and later, including the block editor.
 
-#### How do I know if the integration is working?
-After submitting a test form, check your ActionNetwork action for new submissions. The plugin automatically handles retries and error logging.
+#### How do I know it's working?
+Submit a test form, then look for the new submission in your ActionNetwork action. Failed requests are retried and logged.
 
-#### Can I use this for non-ActionNetwork webhooks?
-This plugin is specifically designed for ActionNetwork's API structure. For general webhooks, consider using [CF7 to Webhook](https://github.com/mariovalney/cf7-to-zapier).
+#### Can I use it with webhooks other than ActionNetwork?
+No, it only speaks ActionNetwork's API. For generic webhooks, try [CF7 to Webhook](https://github.com/mariovalney/cf7-to-zapier).
 
-#### How does file upload work?
-File uploads are automatically handled - files are copied to a secure directory and the URLs are sent to ActionNetwork before CF7 removes the temporary files.
+#### What happens to file uploads?
+The plugin copies uploaded files to a separate directory and sends their URLs to ActionNetwork before CF7 deletes the temporary files.
 
-#### Can I customize field mapping?
-Yes! Use the `actionnetwork` option in your CF7 field tags:  
+#### Can I map a field myself?
+Yes. Add the `actionnetwork` option to the field tag:
 `[text your-field actionnetwork:custom_field_name]`
 
-#### What happens to CF7 emails when integration is active?
-By default, CF7 emails are automatically disabled when ActionNetwork integration is configured to prevent duplicate notifications. ActionNetwork autoresponse emails can be controlled separately.
+#### What happens to CF7's emails?
+Once an ActionNetwork URL is set, CF7's emails are turned off by default so people don't get duplicates. ActionNetwork's autoresponse has its own setting.
 
 #### How does country detection work?
-The plugin tries multiple methods in order:
-1. GeoIP functions (if available)
-2. Free ipapi.co service
-3. CloudFlare country headers
-4. Browser language preferences
+It tries these in order:
+1. GeoIP functions, if your server has them
+2. The free ipapi.co service
+3. CloudFlare's country header
+4. The browser's language settings
 
-#### Can I add multiple ActionNetwork URLs?
-Yes, you can add multiple URLs (one per line) to send the same form data to different ActionNetwork actions.
+#### Can one form send to several ActionNetwork actions?
+Yes. Put one URL per line and each one gets the submission.
 
-### Who is the original developer?
-[Mário Valney](https://mariovalney.com/me)
-Brazilian developer who is part of the [WordPress community](https://profiles.wordpress.org/mariovalney).
+### Who wrote the original plugin?
+[Mário Valney](https://mariovalney.com/me), a Brazilian developer and member of the [WordPress community](https://profiles.wordpress.org/mariovalney).
 
-### Can I help you?
-Yes! Visit the [GitHub repository](https://github.com/procom-dev/form-integration-for-action-network-and-contact-form-7) to contribute code, report issues, or suggest improvements.
+### Can I help?
+Sure. Code, bug reports and ideas are all welcome on [GitHub](https://github.com/procom-dev/form-integration-for-action-network-and-contact-form-7).
 
 ## Screenshots ##
 
 ![Main section of the plugin](assets/screenshot-1.png)
-*Main section of the plugin, where you just enter the Action Network API Endpoint.*
+*The main settings screen. You only need to paste the Action Network API Endpoint here.*
 
-![Field mapping](assets/screenshot-2.png) 
-*The plugin automatically matches your fields from CF7 to the official Action Network's Core Fields.*
+![Field mapping](assets/screenshot-2.png)
+*The plugin matches your CF7 fields to Action Network's core fields.*
 
 ![Tag management](assets/screenshot-3.png)
-*You can also add and remove tags to people submitting your form.*
+*Adding and removing tags for people who submit the form.*
 
 ## Installation ##
 
-1. Install [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) and activate it.
-2. Install "Form Integration for Action Network and Contact Form 7" by using the plugins dashboard or upload the entire `form-integration-for-action-network-and-contact-form-7` folder to the `/wp-content/plugins/` directory.
-3. Activate the plugin through the 'Plugins' menu in WordPress.
-4. You will find the 'ActionNetwork' tab in the form configuration.
+1. Install and activate [Contact Form 7](https://wordpress.org/plugins/contact-form-7/).
+2. Install "Form Integration for Action Network and Contact Form 7" from the Plugins screen, or upload the `form-integration-for-action-network-and-contact-form-7` folder to `/wp-content/plugins/`.
+3. Activate it from the Plugins menu.
+4. Open any form in CF7 and you'll see an "ActionNetwork" tab.
 
 ## Changelog ##
 
+### 1.0.4 ###
+* New: you can turn off automatic field mapping per form (it's on by default). With it off, only the exact ActionNetwork field names (`email`, `given_name`, `family_name`, `phone_number`, `address_lines`, `locality`, `region`, `postal_code`, `country`) are mapped, and every other field is sent as a custom field.
+* The Field Mapping section in the ActionNetwork tab is easier to read. Its table of recognized field names is generated from the same list the plugin uses, so the two always match.
+* Added `Requires at least` and `Requires PHP` to the plugin header. Tested up to WordPress 7.1.3.
+
+### 1.0.3 ###
+* Fix: the admin styles and scripts now load on every Contact Form 7 editor screen, including "Add New". The ActionNetwork tab used to show up unstyled there because asset loading needed a `post` query argument.
+
+### 1.0.2 ###
+* New: works with the "Contact Form 7 Multi-Step Forms" (CF7MSM) plugin. Fields from earlier steps are merged into the submission sent to ActionNetwork (ports upstream 5.0.0).
+* New filter `cfan_get_data_from_cf7msm_posted_data` to turn off CF7MSM data merging, or decide case by case.
+
+### 1.0.1 ###
+* Security: outbound requests use the "safe" HTTP API (`wp_safe_remote_post`/`wp_safe_remote_get`), which blocks requests to private, loopback and link-local addresses (SSRF hardening; ports upstream 5.0.1 / CVE-2026-11395).
+* Security: upload directories get cryptographically random names instead of guessable `uniqid()` ones (ports upstream 5.1.0).
+
 ### 1.0.0 ###
-* **Enhanced Integration**: Complete rewrite with improved ActionNetwork API integration
-* **Smart Field Mapping**: Automatic recognition of 25+ common field name patterns
-* **Country Auto-Detection**: Multiple detection methods for automatic country assignment
-* **Advanced Tagging**: Add/remove ActionNetwork tags with simple configuration
-* **Security Improvements**: WordPress.org compliant with proper nonces and sanitization
-* **Modern Admin UI**: Responsive interface with real-time URL validation
-* **Simplified Activation**: Automatic activation when ActionNetwork URL is provided
-* **Source Tracking**: Enhanced referrer data and campaign source tracking
-* **Retry Logic**: Exponential backoff for reliable API delivery
-* **Email Control**: Configurable ActionNetwork autoresponse and CF7 email management
-* **Multi-URL Support**: Send form data to multiple ActionNetwork actions
-* **Error Handling**: Comprehensive logging and graceful error recovery
-* **Performance**: Optimized data processing and reduced overhead
+* Rewrote the ActionNetwork API integration.
+* Automatic mapping for 25+ common field names.
+* Country detection, with several fallback methods.
+* Add and remove ActionNetwork tags.
+* Nonces, sanitization and capability checks for WordPress.org.
+* New admin screen with live URL validation.
+* The integration turns on as soon as you add a URL.
+* Better referrer and source tracking.
+* Exponential backoff when requests fail.
+* Settings for ActionNetwork's autoresponse and CF7's emails.
+* Send one form to several ActionNetwork actions.
+* More logging and better error handling.
+* Faster data processing.
