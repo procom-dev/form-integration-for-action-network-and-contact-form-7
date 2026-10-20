@@ -130,6 +130,22 @@ Sure. Code, bug reports and ideas are all welcome on [GitHub](https://github.com
 
 ## Changelog ##
 
+### 1.0.4 ###
+* New: you can turn off automatic field mapping per form (it's on by default). With it off, only the exact ActionNetwork field names (`email`, `given_name`, `family_name`, `phone_number`, `address_lines`, `locality`, `region`, `postal_code`, `country`) are mapped, and every other field is sent as a custom field.
+* The Field Mapping section in the ActionNetwork tab is easier to read. Its table of recognized field names is generated from the same list the plugin uses, so the two always match.
+* Added `Requires at least` and `Requires PHP` to the plugin header. Tested up to WordPress 7.1.3.
+
+### 1.0.3 ###
+* Fix: the admin styles and scripts now load on every Contact Form 7 editor screen, including "Add New". The ActionNetwork tab used to show up unstyled there because asset loading needed a `post` query argument.
+
+### 1.0.2 ###
+* New: works with the "Contact Form 7 Multi-Step Forms" (CF7MSM) plugin. Fields from earlier steps are merged into the submission sent to ActionNetwork (ports upstream 5.0.0).
+* New filter `cfan_get_data_from_cf7msm_posted_data` to turn off CF7MSM data merging, or decide case by case.
+
+### 1.0.1 ###
+* Security: outbound requests use the "safe" HTTP API (`wp_safe_remote_post`/`wp_safe_remote_get`), which blocks requests to private, loopback and link-local addresses (SSRF hardening; ports upstream 5.0.1 / CVE-2026-11395).
+* Security: upload directories get cryptographically random names instead of guessable `uniqid()` ones (ports upstream 5.1.0).
+
 ### 1.0.0 ###
 * Rewrote the ActionNetwork API integration.
 * Automatic mapping for 25+ common field names.
