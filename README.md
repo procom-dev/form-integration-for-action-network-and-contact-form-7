@@ -5,7 +5,7 @@
 **Tags:** contact form 7, action network, cf7, actionnetwork, integration  
 **Official website:** https://github.com/procom-dev/form-integration-for-action-network-and-contact-form-7  
 **Requires at least:** 4.7  
-**Tested up to:** 6.4  
+**Tested up to:** 7.1.3  
 **Stable tag:** trunk  
 **Requires PHP:** 7.4  
 **License:** GPLv2 or later  

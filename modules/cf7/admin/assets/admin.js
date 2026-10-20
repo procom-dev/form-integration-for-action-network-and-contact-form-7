@@ -22,6 +22,15 @@
             
             // Activation checkbox change
             $('#cfan-actionnetwork-activate').on('change', this.toggleActivation);
+
+            // Show the mapping table that matches the automatic-mapping setting
+            $('#cfan-auto-field-mapping').on('change', this.toggleFieldMapping);
+        },
+
+        toggleFieldMapping: function() {
+            const auto = $(this).is(':checked');
+            $('[data-cfan-mapping="auto"]').prop('hidden', !auto);
+            $('[data-cfan-mapping="exact"]').prop('hidden', auto);
         },
 
         validateInitialUrl: function() {

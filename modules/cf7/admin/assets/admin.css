@@ -92,47 +92,114 @@
     margin: 0;
 }
 
-.cfan-core-fields {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    padding: 15px;
-    margin-top: 10px;
+/* Content swapped by a toggle uses the hidden attribute; keep it hidden even
+   where a display rule below would otherwise apply. */
+.cfan-panel [hidden] {
+    display: none !important;
 }
 
-.cfan-core-fields ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+.cfan-section-intro {
+    margin: 0 0 20px;
+    color: #50575e;
 }
 
-.cfan-core-fields li {
-    background: #fff;
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-family: monospace;
+.cfan-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 8px;
+    border-radius: 10px;
+    background: #f0f6fc;
+    color: #0a4b78;
+    font-size: 12px;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.cfan-checkbox-field label {
+    margin-bottom: 0;
+}
+
+/* Field mapping reference: ActionNetwork field on the left, CF7 names on the right */
+.cfan-mapping-table {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 0 20px;
+    border-collapse: collapse;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
     font-size: 13px;
 }
 
-.cfan-help-text {
-    background: #e8f4f8;
-    border-left: 4px solid #0073aa;
-    padding: 12px 16px;
-    margin: 15px 0;
+.cfan-mapping-table th,
+.cfan-mapping-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f1;
+    text-align: left;
+    vertical-align: top;
 }
 
-.cfan-help-text h4 {
-    margin: 0 0 8px 0;
-    color: #0073aa;
+.cfan-mapping-table thead th {
+    background: #f6f7f7;
+    border-bottom-color: #dcdcde;
+    color: #50575e;
+    font-weight: 600;
 }
 
-.cfan-help-text p {
-    margin: 0;
-    color: #333;
+.cfan-mapping-table tbody th {
+    width: 150px;
+    color: #1d2327;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.cfan-mapping-table tbody tr:last-child th,
+.cfan-mapping-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.cfan-mapping-table code {
+    display: inline-block;
+    margin: 0 4px 4px 0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: #f6f7f7;
+    font-size: 12px;
+}
+
+/* Neutral information, not a warning: this is how the plugin normally works */
+.cfan-callout {
+    max-width: 736px;
+    margin: 0 0 24px;
+    padding: 12px 12px 12px 16px;
+    border-left: 4px solid #72aee6;
+    background: #f0f6fc;
+}
+
+.cfan-callout p {
+    margin: 0 0 6px;
+    color: #1d2327;
+}
+
+.cfan-callout p:last-child {
+    margin-bottom: 0;
+}
+
+.cfan-callout code {
+    background: #fff;
+}
+
+.cfan-subgroup {
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+.cfan-subgroup h4 {
+    margin: 0 0 10px;
+    color: #1d2327;
+}
+
+.cfan-subgroup .cfan-field-group:last-child {
+    margin-bottom: 0;
 }
 
 
@@ -143,8 +210,9 @@
         max-width: 100%;
     }
     
-    .cfan-core-fields ul {
-        grid-template-columns: 1fr;
+    .cfan-mapping-table tbody th {
+        width: auto;
+        white-space: normal;
     }
-    
+
 }

@@ -2,8 +2,8 @@
 Contributors: procomdev, mariovalney
 Tags: contact form 7, action network, cf7, actionnetwork, integration
 Requires at least: 4.7  
-Tested up to: 6.8  
-Stable tag: 1.0.2  
+Tested up to: 7.1.3
+Stable tag: 1.0.4
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
@@ -160,6 +160,14 @@ This plugin connects to external services to provide its functionality. Here are
 3. You can also add and remove tags to people submitting you form.
 
 == Changelog ==
+
+= 1.0.4 =
+* **New**: Automatic field mapping can be turned off per form (on by default). When off, only the exact ActionNetwork field names (`email`, `given_name`, `family_name`, `phone_number`, `address_lines`, `locality`, `region`, `postal_code`, `country`) are mapped and every other field is sent as a custom field.
+* **Improved**: Clearer Field Mapping section in the ActionNetwork tab, with a table of recognized field names that always matches what the plugin actually maps.
+* Added `Requires at least` and `Requires PHP` to the plugin header. Tested up to WordPress 7.1.3.
+
+= 1.0.3 =
+* **Fix**: Admin panel styles and scripts now load reliably on the Contact Form 7 editor, including the "Add New" form screen. Previously the ActionNetwork tab could render unstyled because asset loading required a `post` query argument.
 
 = 1.0.2 =
 * **New**: Support for the "Contact Form 7 Multi-Step Forms" (CF7MSM) plugin — fields from earlier steps are now merged into the submission sent to ActionNetwork (ports upstream 5.0.0).

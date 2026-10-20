@@ -182,6 +182,12 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 $new_properties[ 'auto_detect_country' ] = '0';
             }
 
+            if ( isset( $_POST['cfan-auto-field-mapping'] ) && sanitize_text_field( wp_unslash( $_POST['cfan-auto-field-mapping'] ) ) === '1' ) {
+                $new_properties[ 'auto_field_mapping' ] = '1';
+            } else {
+                $new_properties[ 'auto_field_mapping' ] = '0';
+            }
+
             if ( isset( $_POST['cfan-source-name'] ) ) {
                 $source_name = sanitize_text_field( wp_unslash( $_POST['cfan-source-name'] ) );
                 $new_properties[ 'source_name' ] = ! empty( $source_name ) ? $source_name : 'contact-form-7';
@@ -247,6 +253,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                     'special_mail_tags'   => '',
                     'custom_headers'      => '',
                     'auto_detect_country' => '1',
+                    'auto_field_mapping'  => '1',
                     'source_name'         => 'contact-form-7',
                     'enable_autoresponse' => '1',
                     'add_tags'            => [],
@@ -714,15 +721,141 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
         }
 
         /**
+         * Whether automatic field mapping is enabled for a form
+         *
+         * Defaults to true when the setting has never been saved.
+         *
+         * @since    1.0.4
+         * @param    array|null    $properties    The form's ActionNetwork properties
+         * @return   bool
+         */
+        public static function is_auto_field_mapping_enabled( $properties ) {
+            return ! isset( $properties['auto_field_mapping'] ) || $properties['auto_field_mapping'] === '1';
+        }
+
+        /**
+         * ActionNetwork person fields, in display order, with their labels
+         *
+         * Keys are the internal targets used by the field mappings.
+         *
+         * @since    1.0.4
+         * @return   array    target => label
+         */
+        public static function get_field_mapping_targets() {
+            return [
+                'address'       => __( 'Email', 'form-integration-for-action-network-and-contact-form-7' ),
+                'given_name'    => __( 'First name', 'form-integration-for-action-network-and-contact-form-7' ),
+                'family_name'   => __( 'Last name', 'form-integration-for-action-network-and-contact-form-7' ),
+                'number'        => __( 'Phone', 'form-integration-for-action-network-and-contact-form-7' ),
+                'address_lines' => __( 'Street address', 'form-integration-for-action-network-and-contact-form-7' ),
+                'locality'      => __( 'City', 'form-integration-for-action-network-and-contact-form-7' ),
+                'region'        => __( 'State / region', 'form-integration-for-action-network-and-contact-form-7' ),
+                'postal_code'   => __( 'Postal code', 'form-integration-for-action-network-and-contact-form-7' ),
+                'country'       => __( 'Country', 'form-integration-for-action-network-and-contact-form-7' ),
+            ];
+        }
+
+        /**
+         * Field names recognized when automatic field mapping is on
+         *
+         * @since    1.0.4
+         * @return   array    CF7 field name => target
+         */
+        public static function get_auto_field_mapping() {
+            return [
+                // Email variations
+                'email' => 'address',
+                'your-email' => 'address',
+                'email-address' => 'address',
+                // First name variations
+                'first-name' => 'given_name',
+                'your-name' => 'given_name',
+                'first_name' => 'given_name',
+                'firstname' => 'given_name',
+                'given-name' => 'given_name',
+                'given_name' => 'given_name',
+                // Last name variations
+                'last-name' => 'family_name',
+                'your-last-name' => 'family_name',
+                'last_name' => 'family_name',
+                'lastname' => 'family_name',
+                'family-name' => 'family_name',
+                'family_name' => 'family_name',
+                'surname' => 'family_name',
+                // Phone variations
+                'phone' => 'number',
+                'your-phone' => 'number',
+                'phone-number' => 'number',
+                'telephone' => 'number',
+                'mobile' => 'number',
+                // Address variations
+                'address' => 'address_lines',
+                'your-address' => 'address_lines',
+                'street-address' => 'address_lines',
+                'street_address' => 'address_lines',
+                'address1' => 'address_lines',
+                // City variations
+                'city' => 'locality',
+                'your-city' => 'locality',
+                'locality' => 'locality',
+                'town' => 'locality',
+                // State/Region variations
+                'state' => 'region',
+                'your-state' => 'region',
+                'province' => 'region',
+                'region' => 'region',
+                // Postal code variations
+                'zip' => 'postal_code',
+                'your-zip' => 'postal_code',
+                'zipcode' => 'postal_code',
+                'zip-code' => 'postal_code',
+                'zip_code' => 'postal_code',
+                'postal-code' => 'postal_code',
+                'postal_code' => 'postal_code',
+                'postcode' => 'postal_code',
+                // Country variations
+                'country' => 'country',
+                'your-country' => 'country'
+            ];
+        }
+
+        /**
+         * Field names recognized when automatic field mapping is off
+         *
+         * One exact name per ActionNetwork field, matching ActionNetwork's
+         * own naming. Any other field is sent as a custom field.
+         *
+         * @since    1.0.4
+         * @return   array    CF7 field name => target
+         */
+        public static function get_exact_field_mapping() {
+            return [
+                'email'         => 'address',
+                'given_name'    => 'given_name',
+                'family_name'   => 'family_name',
+                'phone_number'  => 'number',
+                'address_lines' => 'address_lines',
+                'locality'      => 'locality',
+                'region'        => 'region',
+                'postal_code'   => 'postal_code',
+                'country'       => 'country',
+            ];
+        }
+
+        /**
          * Enqueue admin assets for CF7 edit pages
          *
          * @since    1.0.0
          */
         public function enqueue_admin_assets( $hook ) {
-            // Only load on CF7 edit pages
+            // Load on the Contact Form 7 admin screens (list / add new / edit).
+            // We match on the page hook/screen id rather than requiring a 'post'
+            // query arg, so the panel is styled on the "add new" screen too.
             $screen = get_current_screen();
-            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin asset loading
-            if ( ! $screen || $screen->id !== 'toplevel_page_wpcf7' || ! isset( $_GET['post'] ) ) {
+            $is_cf7_screen = ( is_string( $hook ) && strpos( $hook, 'wpcf7' ) !== false )
+                || ( $screen && strpos( $screen->id, 'wpcf7' ) !== false );
+
+            if ( ! $is_cf7_screen ) {
                 return;
             }
 
@@ -782,66 +915,14 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                 'number' => ''   // phone number
             ];
 
-            // Common field name mappings
-            $field_mapping = [
-                // Email variations
-                'email' => 'address',
-                'your-email' => 'address',
-                'email-address' => 'address',
-                // First name variations
-                'first-name' => 'given_name',
-                'your-name' => 'given_name',
-                'first_name' => 'given_name',
-                'firstname' => 'given_name',
-                'given-name' => 'given_name',
-                'given_name' => 'given_name',
-                // Last name variations
-                'last-name' => 'family_name',
-                'your-last-name' => 'family_name',
-                'last_name' => 'family_name',
-                'lastname' => 'family_name',
-                'family-name' => 'family_name',
-                'family_name' => 'family_name',
-                'surname' => 'family_name',
-                // Phone variations
-                'phone' => 'number',
-                'your-phone' => 'number',
-                'phone-number' => 'number',
-                'telephone' => 'number',
-                'mobile' => 'number',
-                // Address variations
-                'address' => 'address_lines',
-                'your-address' => 'address_lines',
-                'street-address' => 'address_lines',
-                'street_address' => 'address_lines',
-                'address1' => 'address_lines',
-                // City variations
-                'city' => 'locality',
-                'your-city' => 'locality',
-                'locality' => 'locality',
-                'town' => 'locality',
-                // State/Region variations
-                'state' => 'region',
-                'your-state' => 'region',
-                'province' => 'region',
-                'region' => 'region',
-                // Postal code variations
-                'zip' => 'postal_code',
-                'your-zip' => 'postal_code',
-                'zipcode' => 'postal_code',
-                'zip-code' => 'postal_code',
-                'zip_code' => 'postal_code',
-                'postal-code' => 'postal_code',
-                'postal_code' => 'postal_code',
-                'postcode' => 'postal_code',
-                // Country variations
-                'country' => 'country',
-                'your-country' => 'country'
-            ];
-
-            // Get form properties for autoresponse and tags
+            // Get form properties for field mapping, autoresponse and tags
             $properties = $contact_form->prop( self::METADATA );
-            
+
+            // Automatic mapping is on unless explicitly disabled (forms saved
+            // before this setting existed keep the automatic behavior).
+            $auto_mapping = self::is_auto_field_mapping_enabled( $properties );
+            $field_mapping = $auto_mapping ? self::get_auto_field_mapping() : self::get_exact_field_mapping();
+
             // Initialize person data structure
             $person_data = [
                 'person' => [
@@ -892,8 +973,13 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                     continue;
                 }
 
-                // Map field name if we have a mapping
-                $mapped_key = isset( $field_mapping[ $key ] ) ? $field_mapping[ $key ] : $key;
+                // Map field name if we have a mapping. With automatic mapping off,
+                // only the exact names are recognized; everything else is a custom field.
+                if ( isset( $field_mapping[ $key ] ) ) {
+                    $mapped_key = $field_mapping[ $key ];
+                } else {
+                    $mapped_key = $auto_mapping ? $key : '';
+                }
 
                 // Handle core fields
                 if ( array_key_exists( $mapped_key, $core_fields ) ) {

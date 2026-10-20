@@ -12,6 +12,7 @@ $hook_url = [];
 $special_mail_tags = '';
 $custom_headers = '';
 $auto_detect_country = '1';
+$auto_field_mapping = '1';
 $source_name = 'contact-form-7';
 $enable_autoresponse = '1';
 $add_tags = [];
@@ -44,6 +45,8 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
         $auto_detect_country = $properties['auto_detect_country'];
     }
 
+    $auto_field_mapping = CFAN_CF7_Module::is_auto_field_mapping_enabled( $properties ) ? '1' : '0';
+
     if ( isset( $properties['source_name'] ) ) {
         $source_name = $properties['source_name'];
     }
@@ -60,6 +63,14 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
         $remove_tags = $properties['remove_tags'];
     }
 }
+
+// Group the recognized CF7 field names by ActionNetwork field, for the tables.
+$mapping_targets = CFAN_CF7_Module::get_field_mapping_targets();
+$auto_names = array_fill_keys( array_keys( $mapping_targets ), [] );
+foreach ( CFAN_CF7_Module::get_auto_field_mapping() as $cf7_name => $target ) {
+    $auto_names[ $target ][] = $cf7_name;
+}
+$exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
 
 ?>
 
@@ -114,38 +125,88 @@ if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
 
     <div class="cfan-section">
         <h3><?php esc_html_e( 'Field Mapping', 'form-integration-for-action-network-and-contact-form-7' ); ?></h3>
-        
+        <p class="cfan-section-intro">
+            <?php esc_html_e( 'How your Contact Form 7 fields become fields on the person\'s record in ActionNetwork.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
+        </p>
+
         <div class="cfan-field-group">
             <div class="cfan-checkbox-field">
-                <input type="checkbox" id="cfan-auto-detect-country" name="cfan-auto-detect-country" value="1" <?php checked( $auto_detect_country, '1' ); ?>>
-                <label for="cfan-auto-detect-country">
-                    <?php esc_html_e( 'Auto-detect user country when not provided in form', 'form-integration-for-action-network-and-contact-form-7' ); ?>
+                <input type="checkbox" id="cfan-auto-field-mapping" name="cfan-auto-field-mapping" value="1" aria-describedby="cfan-auto-field-mapping-desc" <?php checked( $auto_field_mapping, '1' ); ?>>
+                <label for="cfan-auto-field-mapping">
+                    <?php esc_html_e( 'Automatically recognize common field names', 'form-integration-for-action-network-and-contact-form-7' ); ?>
+                    <span class="cfan-badge"><?php esc_html_e( 'Recommended', 'form-integration-for-action-network-and-contact-form-7' ); ?></span>
                 </label>
             </div>
-            <p class="description">
-                <?php esc_html_e( 'Automatically detects the user\'s country based on their IP address when no country field is filled in the form.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
+            <p class="description" id="cfan-auto-field-mapping-desc">
+                <?php esc_html_e( 'Matches the usual CF7 names, such as your-email or your-name, so most forms work without changes. Turn this off to match only the exact ActionNetwork names.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>
         </div>
-        
-        <div class="cfan-core-fields">
-            <h4><?php esc_html_e( 'Automatic field mappings:', 'form-integration-for-action-network-and-contact-form-7' ); ?></h4>
-            <p><?php esc_html_e( 'The plugin automatically recognizes common form field names and maps them to ActionNetwork\'s person structure. If your CF7 form uses any of these field names, they will be mapped correctly:', 'form-integration-for-action-network-and-contact-form-7' ); ?></p>
-            <ul>
-                <li><strong>your-email, email, email-address</strong> → Email address</li>
-                <li><strong>your-name, first-name, firstname, given-name, given_name</strong> → First name</li>
-                <li><strong>your-last-name, last-name, lastname, family-name, family_name, surname</strong> → Last name</li>
-                <li><strong>your-phone, phone, phone-number, telephone, mobile</strong> → Phone number</li>
-                <li><strong>your-address, address, street-address, street_address, address1</strong> → Street address</li>
-                <li><strong>your-city, city, locality, town</strong> → City</li>
-                <li><strong>your-state, state, province, region</strong> → State/Region</li>
-                <li><strong>your-zip, zip, zipcode, zip-code, zip_code, postal-code, postal_code, postcode</strong> → Postal code</li>
-                <li><strong>your-country, country</strong> → Country</li>
-            </ul>
+
+        <table class="cfan-mapping-table" data-cfan-mapping="auto" <?php echo $auto_field_mapping === '1' ? '' : 'hidden'; ?>>
+            <caption class="screen-reader-text"><?php esc_html_e( 'Recognized field names', 'form-integration-for-action-network-and-contact-form-7' ); ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col"><?php esc_html_e( 'ActionNetwork field', 'form-integration-for-action-network-and-contact-form-7' ); ?></th>
+                    <th scope="col"><?php esc_html_e( 'Recognized CF7 field names', 'form-integration-for-action-network-and-contact-form-7' ); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ( $mapping_targets as $target => $label ) : ?>
+                    <tr>
+                        <th scope="row"><?php echo esc_html( $label ); ?></th>
+                        <td>
+                            <?php foreach ( $auto_names[ $target ] as $cf7_name ) : ?>
+                                <code><?php echo esc_html( $cf7_name ); ?></code>
+                            <?php endforeach; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <table class="cfan-mapping-table" data-cfan-mapping="exact" <?php echo $auto_field_mapping === '1' ? 'hidden' : ''; ?>>
+            <caption class="screen-reader-text"><?php esc_html_e( 'Exact field names', 'form-integration-for-action-network-and-contact-form-7' ); ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col"><?php esc_html_e( 'ActionNetwork field', 'form-integration-for-action-network-and-contact-form-7' ); ?></th>
+                    <th scope="col"><?php esc_html_e( 'Name your CF7 field', 'form-integration-for-action-network-and-contact-form-7' ); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ( $mapping_targets as $target => $label ) : ?>
+                    <?php if ( ! isset( $exact_names[ $target ] ) ) { continue; } ?>
+                    <tr>
+                        <th scope="row"><?php echo esc_html( $label ); ?></th>
+                        <td><code><?php echo esc_html( $exact_names[ $target ] ); ?></code></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <div class="cfan-callout">
+            <p>
+                <strong><?php esc_html_e( 'Any other field is sent as a custom field', 'form-integration-for-action-network-and-contact-form-7' ); ?></strong>
+                <?php esc_html_e( 'under its CF7 field name.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
+            </p>
+            <p>
+                <?php esc_html_e( 'To keep your own field name but send it to a specific ActionNetwork field, add an actionnetwork option to the form tag:', 'form-integration-for-action-network-and-contact-form-7' ); ?>
+            </p>
+            <p><code>[text your-nickname actionnetwork:given_name]</code></p>
         </div>
-        
-        <div class="cfan-help-text" style="background: #fff3cd; border-left-color: #ffc107;">
-            <h4 style="color: #856404;"><?php esc_html_e( 'Important: Custom Fields', 'form-integration-for-action-network-and-contact-form-7' ); ?></h4>
-            <p style="color: #856404;"><?php esc_html_e( 'Any form fields that don\'t match the patterns above will be sent as custom fields to ActionNetwork. Make sure your ActionNetwork action is configured to accept custom fields if you use non-standard field names.', 'form-integration-for-action-network-and-contact-form-7' ); ?></p>
+
+        <div class="cfan-subgroup">
+            <h4><?php esc_html_e( 'Country', 'form-integration-for-action-network-and-contact-form-7' ); ?></h4>
+            <div class="cfan-field-group">
+                <div class="cfan-checkbox-field">
+                    <input type="checkbox" id="cfan-auto-detect-country" name="cfan-auto-detect-country" value="1" aria-describedby="cfan-auto-detect-country-desc" <?php checked( $auto_detect_country, '1' ); ?>>
+                    <label for="cfan-auto-detect-country">
+                        <?php esc_html_e( 'Detect the visitor\'s country when the form has none', 'form-integration-for-action-network-and-contact-form-7' ); ?>
+                    </label>
+                </div>
+                <p class="description" id="cfan-auto-detect-country-desc">
+                    <?php esc_html_e( 'Only used when no country field is filled in. Tries your server\'s GeoIP data, then the ipapi.co lookup service (which receives the visitor\'s IP address), then Cloudflare\'s country header, then the browser language.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
+                </p>
+            </div>
         </div>
     </div>
 
