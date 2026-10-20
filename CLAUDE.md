@@ -50,6 +50,8 @@ The plugin includes smart mapping for common CF7 field patterns:
 - Contact: `your-phone`, `phone` → `phone_numbers`; `your-address` → `postal_addresses`
 - Location: `your-city` → `locality`; `your-state` → `region`; `your-zip` → `postal_code`
 
+Mappings live in `CFAN_CF7_Module::get_auto_field_mapping()` / `get_exact_field_mapping()`; the admin panel renders its tables from these, so edit them there only. Automatic mapping is a per-form setting (`auto_field_mapping`, on by default and for forms saved before it existed); when off, only the exact ActionNetwork names map and everything else becomes a custom field.
+
 ## Security Implementation
 
 ### WordPress.org Compliance
