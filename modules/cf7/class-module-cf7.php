@@ -619,6 +619,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
 
                 // Support to "_raw_" values. @see WPCF7_MailTag::__construct()
                 if ( $mail_tag->get_option( 'do_not_heat' ) ) {
+                    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Contact Form 7 core filter, invoked to resolve its special mail tags.
                     $value = apply_filters( 'wpcf7_special_mail_tags', '', $mail_tag->tag_name(), false, $mail_tag );
                     
                     // Use CF7 submission data instead of direct $_POST access for security
@@ -629,6 +630,7 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
                     }
                 }
 
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Contact Form 7 core filter, invoked to resolve its special mail tags.
                 $value = apply_filters( 'wpcf7_special_mail_tags', $value, $mail_tag->tag_name(), false, $mail_tag );
                 $data[ $key ] = $value;
             }

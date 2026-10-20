@@ -7,70 +7,56 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
  * $contactform is 'WPCF7_ContactForm' from 'CFAN_CF7_Module::html_template_panel_html'
  */
 
-$activate = '0';
-$hook_url = [];
-$special_mail_tags = '';
-$custom_headers = '';
-$auto_detect_country = '1';
-$auto_field_mapping = '1';
-$source_name = 'contact-form-7';
-$enable_autoresponse = '1';
-$add_tags = [];
-$remove_tags = [];
+$cfan_activate = '0';
+$cfan_hook_url = [];
+$cfan_auto_detect_country = '1';
+$cfan_auto_field_mapping = '1';
+$cfan_source_name = 'contact-form-7';
+$cfan_enable_autoresponse = '1';
+$cfan_add_tags = [];
+$cfan_remove_tags = [];
 
 if ( is_a( $contactform, 'WPCF7_ContactForm' ) ) {
-    $properties = $contactform->prop( CFAN_CF7_Module::METADATA );
+    $cfan_properties = $contactform->prop( CFAN_CF7_Module::METADATA );
 
-    if ( isset( $properties['activate'] ) ) {
-        $activate = $properties['activate'];
+    if ( isset( $cfan_properties['activate'] ) ) {
+        $cfan_activate = $cfan_properties['activate'];
     }
 
-    if ( isset( $properties['hook_url'] ) ) {
-        $hook_url = (array) $properties['hook_url'];
+    if ( isset( $cfan_properties['hook_url'] ) ) {
+        $cfan_hook_url = (array) $cfan_properties['hook_url'];
     }
 
-    if ( isset( $properties['send_mail'] ) ) {
-        $send_mail = $properties['send_mail'];
+    if ( isset( $cfan_properties['auto_detect_country'] ) ) {
+        $cfan_auto_detect_country = $cfan_properties['auto_detect_country'];
     }
 
-    if ( isset( $properties['special_mail_tags'] ) ) {
-        $special_mail_tags = $properties['special_mail_tags'];
+    $cfan_auto_field_mapping = CFAN_CF7_Module::is_auto_field_mapping_enabled( $cfan_properties ) ? '1' : '0';
+
+    if ( isset( $cfan_properties['source_name'] ) ) {
+        $cfan_source_name = $cfan_properties['source_name'];
     }
 
-    if ( isset( $properties['custom_headers'] ) ) {
-        $custom_headers = $properties['custom_headers'];
+    if ( isset( $cfan_properties['enable_autoresponse'] ) ) {
+        $cfan_enable_autoresponse = $cfan_properties['enable_autoresponse'];
     }
 
-    if ( isset( $properties['auto_detect_country'] ) ) {
-        $auto_detect_country = $properties['auto_detect_country'];
+    if ( isset( $cfan_properties['add_tags'] ) && is_array( $cfan_properties['add_tags'] ) ) {
+        $cfan_add_tags = $cfan_properties['add_tags'];
     }
 
-    $auto_field_mapping = CFAN_CF7_Module::is_auto_field_mapping_enabled( $properties ) ? '1' : '0';
-
-    if ( isset( $properties['source_name'] ) ) {
-        $source_name = $properties['source_name'];
-    }
-
-    if ( isset( $properties['enable_autoresponse'] ) ) {
-        $enable_autoresponse = $properties['enable_autoresponse'];
-    }
-
-    if ( isset( $properties['add_tags'] ) && is_array( $properties['add_tags'] ) ) {
-        $add_tags = $properties['add_tags'];
-    }
-
-    if ( isset( $properties['remove_tags'] ) && is_array( $properties['remove_tags'] ) ) {
-        $remove_tags = $properties['remove_tags'];
+    if ( isset( $cfan_properties['remove_tags'] ) && is_array( $cfan_properties['remove_tags'] ) ) {
+        $cfan_remove_tags = $cfan_properties['remove_tags'];
     }
 }
 
 // Group the recognized CF7 field names by ActionNetwork field, for the tables.
-$mapping_targets = CFAN_CF7_Module::get_field_mapping_targets();
-$auto_names = array_fill_keys( array_keys( $mapping_targets ), [] );
-foreach ( CFAN_CF7_Module::get_auto_field_mapping() as $cf7_name => $target ) {
-    $auto_names[ $target ][] = $cf7_name;
+$cfan_mapping_targets = CFAN_CF7_Module::get_field_mapping_targets();
+$cfan_auto_names = array_fill_keys( array_keys( $cfan_mapping_targets ), [] );
+foreach ( CFAN_CF7_Module::get_auto_field_mapping() as $cfan_cf7_name => $cfan_target ) {
+    $cfan_auto_names[ $cfan_target ][] = $cfan_cf7_name;
 }
-$exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
+$cfan_exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
 
 ?>
 
@@ -88,8 +74,8 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
             <label for="cfan-actionnetwork-hook-url">
                 <?php esc_html_e( 'ActionNetwork API Endpoint URL', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </label>
-            <input type="url" id="cfan-actionnetwork-hook-url" name="cfan-actionnetwork-hook-url" value="<?php echo esc_attr( implode( PHP_EOL, $hook_url ) ); ?>" placeholder="https://actionnetwork.org/api/v2/forms/your-form-id">
-            <?php if ( $activate && empty( $hook_url ) ): ?>
+            <input type="url" id="cfan-actionnetwork-hook-url" name="cfan-actionnetwork-hook-url" value="<?php echo esc_attr( implode( PHP_EOL, $cfan_hook_url ) ); ?>" placeholder="https://actionnetwork.org/api/v2/forms/your-form-id">
+            <?php if ( $cfan_activate && empty( $cfan_hook_url ) ): ?>
                 <div class="cfan-url-validation error">
                     <?php esc_html_e( 'You must enter an ActionNetwork API Endpoint URL', 'form-integration-for-action-network-and-contact-form-7' ); ?>
                 </div>
@@ -104,7 +90,7 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
             <label for="cfan-source-name">
                 <?php esc_html_e( 'Source Name', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </label>
-            <input type="text" id="cfan-source-name" name="cfan-source-name" value="<?php echo esc_attr( $source_name ); ?>" placeholder="contact-form-7">
+            <input type="text" id="cfan-source-name" name="cfan-source-name" value="<?php echo esc_attr( $cfan_source_name ); ?>" placeholder="contact-form-7">
             <p class="description">
                 <?php esc_html_e( 'This will be sent as the source identifier to ActionNetwork. The website URL where the form is submitted will be sent as the website referrer.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>
@@ -112,7 +98,7 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
 
         <div class="cfan-field-group">
             <div class="cfan-checkbox-field">
-                <input type="checkbox" id="cfan-enable-autoresponse" name="cfan-enable-autoresponse" value="1" <?php checked( $enable_autoresponse, '1' ); ?>>
+                <input type="checkbox" id="cfan-enable-autoresponse" name="cfan-enable-autoresponse" value="1" <?php checked( $cfan_enable_autoresponse, '1' ); ?>>
                 <label for="cfan-enable-autoresponse">
                     <?php esc_html_e( 'Enable ActionNetwork autoresponse email', 'form-integration-for-action-network-and-contact-form-7' ); ?>
                 </label>
@@ -131,7 +117,7 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
 
         <div class="cfan-field-group">
             <div class="cfan-checkbox-field">
-                <input type="checkbox" id="cfan-auto-field-mapping" name="cfan-auto-field-mapping" value="1" aria-describedby="cfan-auto-field-mapping-desc" <?php checked( $auto_field_mapping, '1' ); ?>>
+                <input type="checkbox" id="cfan-auto-field-mapping" name="cfan-auto-field-mapping" value="1" aria-describedby="cfan-auto-field-mapping-desc" <?php checked( $cfan_auto_field_mapping, '1' ); ?>>
                 <label for="cfan-auto-field-mapping">
                     <?php esc_html_e( 'Automatically recognize common field names', 'form-integration-for-action-network-and-contact-form-7' ); ?>
                     <span class="cfan-badge"><?php esc_html_e( 'Recommended', 'form-integration-for-action-network-and-contact-form-7' ); ?></span>
@@ -142,7 +128,7 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
             </p>
         </div>
 
-        <table class="cfan-mapping-table" data-cfan-mapping="auto" <?php echo $auto_field_mapping === '1' ? '' : 'hidden'; ?>>
+        <table class="cfan-mapping-table" data-cfan-mapping="auto" <?php echo $cfan_auto_field_mapping === '1' ? '' : 'hidden'; ?>>
             <caption class="screen-reader-text"><?php esc_html_e( 'Recognized field names', 'form-integration-for-action-network-and-contact-form-7' ); ?></caption>
             <thead>
                 <tr>
@@ -151,12 +137,12 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ( $mapping_targets as $target => $label ) : ?>
+                <?php foreach ( $cfan_mapping_targets as $cfan_target => $cfan_label ) : ?>
                     <tr>
-                        <th scope="row"><?php echo esc_html( $label ); ?></th>
+                        <th scope="row"><?php echo esc_html( $cfan_label ); ?></th>
                         <td>
-                            <?php foreach ( $auto_names[ $target ] as $cf7_name ) : ?>
-                                <code><?php echo esc_html( $cf7_name ); ?></code>
+                            <?php foreach ( $cfan_auto_names[ $cfan_target ] as $cfan_cf7_name ) : ?>
+                                <code><?php echo esc_html( $cfan_cf7_name ); ?></code>
                             <?php endforeach; ?>
                         </td>
                     </tr>
@@ -164,7 +150,7 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
             </tbody>
         </table>
 
-        <table class="cfan-mapping-table" data-cfan-mapping="exact" <?php echo $auto_field_mapping === '1' ? 'hidden' : ''; ?>>
+        <table class="cfan-mapping-table" data-cfan-mapping="exact" <?php echo $cfan_auto_field_mapping === '1' ? 'hidden' : ''; ?>>
             <caption class="screen-reader-text"><?php esc_html_e( 'Exact field names', 'form-integration-for-action-network-and-contact-form-7' ); ?></caption>
             <thead>
                 <tr>
@@ -173,11 +159,11 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ( $mapping_targets as $target => $label ) : ?>
-                    <?php if ( ! isset( $exact_names[ $target ] ) ) { continue; } ?>
+                <?php foreach ( $cfan_mapping_targets as $cfan_target => $cfan_label ) : ?>
+                    <?php if ( ! isset( $cfan_exact_names[ $cfan_target ] ) ) { continue; } ?>
                     <tr>
-                        <th scope="row"><?php echo esc_html( $label ); ?></th>
-                        <td><code><?php echo esc_html( $exact_names[ $target ] ); ?></code></td>
+                        <th scope="row"><?php echo esc_html( $cfan_label ); ?></th>
+                        <td><code><?php echo esc_html( $cfan_exact_names[ $cfan_target ] ); ?></code></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -198,7 +184,7 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
             <h4><?php esc_html_e( 'Country', 'form-integration-for-action-network-and-contact-form-7' ); ?></h4>
             <div class="cfan-field-group">
                 <div class="cfan-checkbox-field">
-                    <input type="checkbox" id="cfan-auto-detect-country" name="cfan-auto-detect-country" value="1" aria-describedby="cfan-auto-detect-country-desc" <?php checked( $auto_detect_country, '1' ); ?>>
+                    <input type="checkbox" id="cfan-auto-detect-country" name="cfan-auto-detect-country" value="1" aria-describedby="cfan-auto-detect-country-desc" <?php checked( $cfan_auto_detect_country, '1' ); ?>>
                     <label for="cfan-auto-detect-country">
                         <?php esc_html_e( 'Detect the visitor\'s country when the form has none', 'form-integration-for-action-network-and-contact-form-7' ); ?>
                     </label>
@@ -217,7 +203,7 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
             <label for="cfan-add-tags">
                 <?php esc_html_e( 'Add Tags', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </label>
-            <textarea id="cfan-add-tags" name="cfan-add-tags" rows="3" placeholder="<?php esc_attr_e( 'volunteer, member, subscriber', 'form-integration-for-action-network-and-contact-form-7' ); ?>"><?php echo esc_textarea( implode( ', ', $add_tags ) ); ?></textarea>
+            <textarea id="cfan-add-tags" name="cfan-add-tags" rows="3" placeholder="<?php esc_attr_e( 'volunteer, member, subscriber', 'form-integration-for-action-network-and-contact-form-7' ); ?>"><?php echo esc_textarea( implode( ', ', $cfan_add_tags ) ); ?></textarea>
             <p class="description">
                 <?php esc_html_e( 'Tags to add to the person\'s record in ActionNetwork. Separate multiple tags with commas. These tags must already exist in your ActionNetwork account.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>
@@ -227,7 +213,7 @@ $exact_names = array_flip( CFAN_CF7_Module::get_exact_field_mapping() );
             <label for="cfan-remove-tags">
                 <?php esc_html_e( 'Remove Tags', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </label>
-            <textarea id="cfan-remove-tags" name="cfan-remove-tags" rows="3" placeholder="<?php esc_attr_e( 'inactive, unsubscribed', 'form-integration-for-action-network-and-contact-form-7' ); ?>"><?php echo esc_textarea( implode( ', ', $remove_tags ) ); ?></textarea>
+            <textarea id="cfan-remove-tags" name="cfan-remove-tags" rows="3" placeholder="<?php esc_attr_e( 'inactive, unsubscribed', 'form-integration-for-action-network-and-contact-form-7' ); ?>"><?php echo esc_textarea( implode( ', ', $cfan_remove_tags ) ); ?></textarea>
             <p class="description">
                 <?php esc_html_e( 'Tags to remove from the person\'s record in ActionNetwork. Separate multiple tags with commas. Tag addition runs before tag removal.', 'form-integration-for-action-network-and-contact-form-7' ); ?>
             </p>

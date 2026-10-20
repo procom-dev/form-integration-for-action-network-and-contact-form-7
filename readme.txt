@@ -2,7 +2,7 @@
 Contributors: procomdev, mariovalney
 Tags: contact form 7, action network, cf7, actionnetwork, integration
 Requires at least: 4.7  
-Tested up to: 7.1.3
+Tested up to: 7.1
 Stable tag: 1.0.4
 Requires PHP: 7.4  
 License: GPLv2 or later  
