@@ -3,7 +3,7 @@ Contributors: procomdev, mariovalney
 Tags: contact form 7, action network, cf7, actionnetwork, integration
 Requires at least: 4.7  
 Tested up to: 6.8  
-Stable tag: 1.0.2  
+Stable tag: 1.0.3  
 Requires PHP: 7.4  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html  
@@ -160,6 +160,9 @@ This plugin connects to external services to provide its functionality. Here are
 3. You can also add and remove tags to people submitting you form.
 
 == Changelog ==
+
+= 1.0.3 =
+* **Fix**: Admin panel styles and scripts now load reliably on the Contact Form 7 editor, including the "Add New" form screen. Previously the ActionNetwork tab could render unstyled because asset loading required a `post` query argument.
 
 = 1.0.2 =
 * **New**: Support for the "Contact Form 7 Multi-Step Forms" (CF7MSM) plugin — fields from earlier steps are now merged into the submission sent to ActionNetwork (ports upstream 5.0.0).

@@ -719,10 +719,14 @@ if ( ! class_exists( 'CFAN_CF7_Module' ) ) {
          * @since    1.0.0
          */
         public function enqueue_admin_assets( $hook ) {
-            // Only load on CF7 edit pages
+            // Load on the Contact Form 7 admin screens (list / add new / edit).
+            // We match on the page hook/screen id rather than requiring a 'post'
+            // query arg, so the panel is styled on the "add new" screen too.
             $screen = get_current_screen();
-            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin asset loading
-            if ( ! $screen || $screen->id !== 'toplevel_page_wpcf7' || ! isset( $_GET['post'] ) ) {
+            $is_cf7_screen = ( is_string( $hook ) && strpos( $hook, 'wpcf7' ) !== false )
+                || ( $screen && strpos( $screen->id, 'wpcf7' ) !== false );
+
+            if ( ! $is_cf7_screen ) {
                 return;
             }
 
