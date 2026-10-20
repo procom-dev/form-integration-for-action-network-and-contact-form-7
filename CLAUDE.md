@@ -11,7 +11,7 @@ This is a WordPress plugin that integrates Contact Form 7 (CF7) with ActionNetwo
 The plugin follows a modular architecture with enhanced security and modern WordPress development practices:
 
 ### Core Plugin Structure
-- **Main Plugin File**: `cf7-actionnetwork-integration.php` - Entry point with `CFAN_Core` orchestrator
+- **Main Plugin File**: `form-integration-for-action-network-and-contact-form-7.php` - Entry point with `CFAN_Core` orchestrator
 - **Core Class**: `CFAN_Core` - Manages hooks, filters, module loading, and plugin constants
 - **Module System**: Two specialized modules in `/modules/` directory
 - **Logging System**: `includes/class-cfan-logger.php` - Comprehensive logging with WP_DEBUG integration
@@ -54,7 +54,7 @@ The plugin includes smart mapping for common CF7 field patterns:
 
 ### WordPress.org Compliance
 - **Unique prefixes**: All functions/classes use `cfan_` or `CFAN_` prefix
-- **Text domain**: Consistent `cf7-actionnetwork-integration` throughout
+- **Text domain**: Consistent `form-integration-for-action-network-and-contact-form-7` throughout
 - **Nonce verification**: All admin forms protected with `wp_nonce_field()`
 - **Capability checks**: `current_user_can('wpcf7_edit_contact_form')` validation
 - **Input sanitization**: `sanitize_text_field()`, `sanitize_url()`, `sanitize_email()`
@@ -76,8 +76,8 @@ The plugin includes smart mapping for common CF7 field patterns:
 
 ### File Organization
 ```
-cf7-actionnetwork-integration/
-├── cf7-actionnetwork-integration.php (main plugin file - CFAN_Core orchestrator)
+form-integration-for-action-network-and-contact-form-7/
+├── form-integration-for-action-network-and-contact-form-7.php (main plugin file - CFAN_Core orchestrator)
 ├── includes/
 │   ├── class-cfan-logger.php (centralized logging system)
 │   └── functions-debug.php (cfan_dd/cfan_dump debug helpers)
